@@ -46,6 +46,15 @@ export interface SpunCopy {
   pricingIntro: string;
   permitDetails: string;
   landfillDetails: string;
+  testimonialName: string;
+  testimonialRole: string;
+  testimonialText: string;
+  testimonialName2: string;
+  testimonialRole2: string;
+  testimonialText2: string;
+  testimonialName3: string;
+  testimonialRole3: string;
+  testimonialText3: string;
 }
 
 export function spinLocationCopy(input: SpinInput): SpunCopy {
@@ -99,10 +108,85 @@ export function spinLocationCopy(input: SpinInput): SpunCopy {
     `Waste is transported directly to ${landfillName}, where recyclables are separated from landfill-bound debris to maintain eco-compliance in the greater ${city} area.`
   ];
 
+  // Testimonial 1: Residential customer
+  const testimonialNames1 = ['Mike R.', 'Jason T.', 'David L.', 'Chris M.', 'Brian K.'];
+  const testimonialRoles1 = ['Homeowner', 'Property Owner', 'Resident', 'Home Renovator', 'DIY Homeowner'];
+  const testimonialTexts1 = [
+    `Fast delivery and fair pricing for my kitchen demo in ${city}. The driver placed it exactly where I needed on my driveway. Would absolutely use again.`,
+    `Needed a 20-yard dumpster for a full garage cleanout in ${city}. Showed up next morning, picked up on time. No surprise fees. Exactly what was quoted.`,
+    `Used them for a bathroom remodel in ${city}. The flat-rate pricing was transparent and the dumpster arrived within the delivery window. Very smooth process.`,
+    `Rented a 30-yard for a major home renovation in ${city}. Competitive price, on-time delivery, and the pickup was scheduled exactly when I needed it.`
+  ];
+
+  // Testimonial 2: Contractor/Commercial
+  const testimonialNames2 = ['Sarah M.', 'Jennifer P.', 'Amanda K.', 'Lisa D.', 'Karen W.'];
+  const testimonialRoles2 = ['GC, Local Construction', 'Project Manager', 'Site Supervisor', 'Operations Manager', 'Renovation Contractor'];
+  const testimonialTexts2 = [
+    `We run multiple job sites across ${stateCode} and these guys consistently deliver the best rates in the ${city} area. Reliable partner for our crew.`,
+    `Managing waste on a commercial tear-down in ${city} was seamless. They handled the permits guidance and had the 40-yard bin dropped same week.`,
+    `Our construction company uses them for every project in the ${city} metro. Predictable flat rates make budgeting easy. No games with overage fees.`,
+    `As a contractor working throughout ${stateFull}, their ${city} dispatch is always responsive. Good communication and fair pricing on every rental.`
+  ];
+
+  // Testimonial 3: Positive general
+  const testimonialNames3 = ['Tom H.', 'Robert S.', 'James W.', 'Andrew F.', 'Daniel B.'];
+  const testimonialRoles3 = [`${city} Resident`, 'Small Business Owner', 'Property Manager', 'Real Estate Investor', 'Landlord'];
+  const testimonialTexts3 = [
+    `Best dumpster rental experience I've had in ${city}. The online quote matched the final price exactly. Refreshingly honest service.`,
+    `Compared 3 different haulers in ${city} and this was the most affordable by far. Clean dumpster, on-time drop, hassle-free pickup. 5 stars.`,
+    `Managing a rental property cleanout in ${city}. They made it simple — booked online, dumpster arrived next day, picked up when I called. Perfect.`,
+    `I've used local haulers in ${city} before but the pricing was always confusing. These flat rates are clear and the service was professional.`
+  ];
+
   return {
     heroIntro: prng.pick(heroIntroOptions),
     pricingIntro: prng.pick(pricingIntroOptions),
     permitDetails: prng.pick(permitDetailsOptions),
-    landfillDetails: prng.pick(landfillDetailsOptions)
+    landfillDetails: prng.pick(landfillDetailsOptions),
+    testimonialName: prng.pick(testimonialNames1),
+    testimonialRole: prng.pick(testimonialRoles1),
+    testimonialText: prng.pick(testimonialTexts1),
+    testimonialName2: prng.pick(testimonialNames2),
+    testimonialRole2: prng.pick(testimonialRoles2),
+    testimonialText2: prng.pick(testimonialTexts2),
+    testimonialName3: prng.pick(testimonialNames3),
+    testimonialRole3: prng.pick(testimonialRoles3),
+    testimonialText3: prng.pick(testimonialTexts3),
   };
+}
+
+export interface ActivityTickerItem {
+  size: string;
+  city: string;
+  state: string;
+  minutesAgo: number;
+}
+
+export function spinActivityTicker(slug: string, nearbyCity: string, stateCode: string): ActivityTickerItem[] {
+  const seed = getSeed(slug + '-activity');
+  const prng = createPRNG(seed);
+
+  const sizes = ['10-Yard', '20-Yard', '30-Yard', '40-Yard'];
+  const minutesOptions = [3, 7, 12, 18, 24, 31, 45];
+
+  return [
+    {
+      size: prng.pick(sizes),
+      city: nearbyCity,
+      state: stateCode,
+      minutesAgo: prng.pick(minutesOptions)
+    },
+    {
+      size: prng.pick(sizes),
+      city: nearbyCity,
+      state: stateCode, 
+      minutesAgo: prng.pick(minutesOptions)
+    },
+    {
+      size: prng.pick(sizes),
+      city: nearbyCity,
+      state: stateCode,
+      minutesAgo: prng.pick(minutesOptions)
+    }
+  ];
 }

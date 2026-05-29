@@ -2,9 +2,10 @@
 interface Props {
   city?: string;
   state?: string;
+  startingPrice?: number;
 }
 
-const { city = "Your Local Area", state = "" } = Astro.props;
+const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
 ---
 
 <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-2xl border-2 border-brand-500/20">
@@ -32,6 +33,20 @@ const { city = "Your Local Area", state = "" } = Astro.props;
 
     <!-- STEP 1: Project Details & Zip Code -->
     <div id="form-step-1" class="space-y-5 transition-opacity duration-300">
+      
+      {/* Dynamic Price Anchor Banner */}
+      {startingPrice && (
+        <div class="text-center p-3 rounded-xl bg-brand-500/5 border border-brand-500/15 -mt-1">
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-brand-500 text-sm">🏷️</span>
+            <span class="text-brand-500 font-display font-extrabold text-lg tracking-tight">
+              Dumpsters from ${startingPrice}
+            </span>
+          </div>
+          <span class="text-gray-500 text-[10px] font-semibold uppercase tracking-wider mt-0.5 block">Flat-rate in {city}, {state}</span>
+        </div>
+      )}
+
       <div class="text-center sm:text-left">
         <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
           Check Next-Day Dumpster Availability

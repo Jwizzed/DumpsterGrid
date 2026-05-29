@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import LeadForm from '../../components/LeadForm.astro';
 import { DatabaseSync } from 'node:sqlite';
 import { join } from 'node:path';
-import { spinLocationCopy } from '../../lib/spin';
+import { spinLocationCopy, spinActivityTicker } from '../../lib/spin';
 
 // Define static paths for all 10,000 programmatic city routes
 export function getStaticPaths() {
@@ -66,6 +66,9 @@ const pricingPlans = [
 ];
 
 const popular20ydLow = loc.avg_low_20yd;
+
+// Generate deterministic "recently booked" activity ticker data
+const activityItems = spinActivityTicker(slug || '', cityName, stateCode);
 
 // Construct dynamic JSON-LD Schema to boost localized search results
 const schema = {
@@ -141,6 +144,26 @@ const schemaString = JSON.stringify(schema);
   phone={loc.phone}
   schema={schemaString}
 >
+  <!-- Recently Booked Activity Ticker -->
+  <div class="bg-dark-surface/80 border-b border-dark-border overflow-hidden" id="activity-ticker-wrapper">
+    <div class="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-center gap-3">
+      <span class="relative flex h-2.5 w-2.5 shrink-0">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+      </span>
+      <div class="overflow-hidden h-5 relative" id="activity-ticker">
+        {activityItems.map((item, i) => (
+          <p 
+            class={`activity-ticker-item text-xs text-gray-400 font-semibold whitespace-nowrap absolute inset-0 transition-all duration-500 ${i === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            data-index={i}
+          >
+            <span class="text-white">{item.size}</span> dumpster booked in <span class="text-brand-500">{item.city}, {item.state}</span> — {item.minutesAgo} min ago
+          </p>
+        ))}
+      </div>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <section class="relative py-16 px-6 overflow-hidden">
     <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -left-10 animate-pulse-slow"></div>
@@ -239,7 +262,7 @@ const schemaString = JSON.stringify(schema);
 
         <!-- Form Column (Locks into 45% screen share on desktop, stacks second on mobile) -->
         <div class="lg:col-span-5 w-full">
-          <LeadForm city={cityName} state={stateCode} />
+          <LeadForm city={cityName} state={stateCode} startingPrice={popular20ydLow} />
         </div>
 
         <!-- Mobile-Only Details Block (Appears below the Form Column on mobile) -->
@@ -350,6 +373,125 @@ const schemaString = JSON.stringify(schema);
         >
           Check Local ZIP Code
         </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Social Proof & Trust Section -->
+  <section class="py-16 px-6 border-y border-dark-border bg-dark-bg/80 relative overflow-hidden">
+    <div class="ambient-glow-blue w-[300px] h-[300px] -top-20 left-1/2 animate-pulse-slow"></div>
+    
+    <div class="max-w-6xl mx-auto relative z-10 space-y-14">
+      
+      <!-- Aggregate Stats Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x divide-dark-border text-center">
+        <div class="space-y-1">
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">47,000+</span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">🚛 Dumpsters Delivered Nationwide</span>
+        </div>
+        <div class="space-y-1">
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">4.8<span class="text-brand-500">/5</span></span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">⭐ Average Customer Rating</span>
+        </div>
+        <div class="space-y-1">
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">10,000+</span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">📍 U.S. Cities Served</span>
+        </div>
+      </div>
+
+      <!-- Testimonial Cards -->
+      <div class="space-y-6">
+        <div class="text-center">
+          <h3 class="font-display font-extrabold text-2xl text-white">What {cityName} Area Customers Say</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Testimonial 1 -->
+          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+            <div class="flex items-center gap-1 mb-3">
+              {[1,2,3,4,5].map(() => (
+                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+              "{spun.testimonialText}"
+            </p>
+            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
+              <div class="w-9 h-9 rounded-full bg-brand-500/15 border border-brand-500/20 flex items-center justify-center text-brand-500 font-display font-bold text-sm">
+                {spun.testimonialName.charAt(0)}
+              </div>
+              <div>
+                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName}</span>
+                <span class="block text-[11px] text-gray-500">{spun.testimonialRole}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+            <div class="flex items-center gap-1 mb-3">
+              {[1,2,3,4,5].map(() => (
+                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+              "{spun.testimonialText2}"
+            </p>
+            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
+              <div class="w-9 h-9 rounded-full bg-blue-500/15 border border-blue-500/20 flex items-center justify-center text-blue-400 font-display font-bold text-sm">
+                {spun.testimonialName2.charAt(0)}
+              </div>
+              <div>
+                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName2}</span>
+                <span class="block text-[11px] text-gray-500">{spun.testimonialRole2}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+            <div class="flex items-center gap-1 mb-3">
+              {[1,2,3,4,5].map(() => (
+                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+              "{spun.testimonialText3}"
+            </p>
+            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
+              <div class="w-9 h-9 rounded-full bg-green-500/15 border border-green-500/20 flex items-center justify-center text-green-400 font-display font-bold text-sm">
+                {spun.testimonialName3.charAt(0)}
+              </div>
+              <div>
+                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName3}</span>
+                <span class="block text-[11px] text-gray-500">{spun.testimonialRole3}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Badge Bar -->
+      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-4">
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+          <span class="text-base">🏅</span> BBB Accredited Partners
+        </div>
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+          <span class="text-base">♻️</span> EPA Compliant Disposal
+        </div>
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+          <span class="text-base">🛡️</span> Licensed & Insured Haulers
+        </div>
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+          <span class="text-base">💳</span> All Major Cards Accepted
+        </div>
       </div>
 
     </div>
@@ -599,4 +741,36 @@ const schemaString = JSON.stringify(schema);
 
     </div>
   </section>
+  <!-- Activity Ticker Rotation Script -->
+  <script>
+    function initActivityTicker() {
+      const ticker = document.getElementById('activity-ticker');
+      if (!ticker) return;
+
+      const items = ticker.querySelectorAll('.activity-ticker-item');
+      if (items.length <= 1) return;
+
+      let currentIndex = 0;
+
+      setInterval(() => {
+        // Fade out current
+        const current = items[currentIndex] as HTMLElement;
+        current.classList.remove('opacity-100', 'translate-y-0');
+        current.classList.add('opacity-0', '-translate-y-4');
+
+        // Move to next
+        currentIndex = (currentIndex + 1) % items.length;
+
+        // Fade in next (with slight delay for smooth transition)
+        setTimeout(() => {
+          const next = items[currentIndex] as HTMLElement;
+          next.classList.remove('opacity-0', 'translate-y-4', '-translate-y-4');
+          next.classList.add('opacity-100', 'translate-y-0');
+        }, 300);
+      }, 4000);
+    }
+
+    initActivityTicker();
+    document.addEventListener('astro:page-load', initActivityTicker);
+  </script>
 </Layout>
