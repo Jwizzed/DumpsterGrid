@@ -3,24 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import { DatabaseSync } from 'node:sqlite';
 import { join } from 'node:path';
 
-// Fetch states and cities from SQLite vault
+// Fetch states with their programmatic city counts from SQLite vault
 const dbPath = join(process.cwd(), 'dumpsters.db');
 const db = new DatabaseSync(dbPath);
 
-const statesStmt = db.prepare('SELECT DISTINCT state, state_full FROM locations ORDER BY state_full ASC');
-const states = statesStmt.all() as Array<{ state: string; state_full: string }>;
-
-const citiesStmt = db.prepare('SELECT city, state, population, slug FROM locations ORDER BY city ASC');
-const cities = citiesStmt.all() as Array<{ city: string; state: string; population: number; slug: string }>;
-
-// Group cities by state
-const stateGroups = states.map(s => {
-  return {
-    state: s.state,
-    state_full: s.state_full,
-    cities: cities.filter(c => c.state === s.state)
-  };
-});
+const statesStmt = db.prepare(`
+  SELECT state, state_full, COUNT(*) AS city_count 
+  FROM locations 
+  GROUP BY state, state_full 
+  ORDER BY state_full ASC
+`);
+const states = statesStmt.all() as Array<{ state: string; state_full: string; city_count: number }>;
 ---
 
 <Layout 
@@ -45,47 +38,38 @@ const stateGroups = states.map(s => {
     </div>
   </section>
 
-  <!-- States & Cities Grid -->
+  <!-- States Aggregated Grid -->
   <section class="pb-24 px-6 max-w-5xl mx-auto relative z-10">
-    <div class="space-y-12">
-      {stateGroups.map(group => (
-        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
-          
-          <!-- State Title Header -->
-          <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-            <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white flex items-center gap-3">
-              <span class="text-brand-500 font-normal select-none">🗺️</span>
-              {group.state_full}
-              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-bg border border-dark-border text-gray-400">
-                {group.state}
+    <div class="glass-card rounded-3xl p-8 space-y-8">
+      <div class="border-b border-gray-800 pb-4 flex items-center justify-between">
+        <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white flex items-center gap-3">
+          <span class="text-brand-500 font-normal select-none">🗺️</span>
+          United States Directory
+        </h2>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-dark-bg border border-dark-border text-gray-400">
+          {states.length} Active Regions
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {states.map(state => (
+          <a 
+            href={`/locations/${state.state.toLowerCase()}`}
+            class="px-5 py-4 rounded-2xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-brand-500 select-none">📌</span>
+              <span>{state.state_full}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-gray-500 font-display bg-dark-card border border-dark-border px-2 py-0.5 rounded-lg group-hover:border-brand-500/20 group-hover:text-brand-500 transition-colors">
+                {state.city_count} Cities
               </span>
-            </h2>
-            <a 
-              href={`/locations/${group.state.toLowerCase()}`}
-              class="text-xs font-bold text-brand-500 hover:text-brand-600 transition-colors uppercase tracking-wider flex items-center gap-1 group"
-            >
-              All {group.state_full} Cities
-              <span class="transition-transform group-hover:translate-x-0.5">→</span>
-            </a>
-          </div>
-
-          <!-- Cities Link Grids -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {group.cities.map(city => (
-              <a 
-                href={`/locations/${city.slug}`}
-                class="px-4 py-3 rounded-xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center sm:text-left flex items-center justify-between"
-              >
-                <span>{city.city}</span>
-                <span class="hidden sm:inline-block text-[10px] text-gray-600 font-display">
-                  {city.population > 1000000 ? 'Metro' : 'City'}
-                </span>
-              </a>
-            ))}
-          </div>
-
-        </div>
-      ))}
+              <span class="text-brand-500 font-bold opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">→</span>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 </Layout>

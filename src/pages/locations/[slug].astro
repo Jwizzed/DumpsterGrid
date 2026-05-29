@@ -9,21 +9,15 @@ import { spinLocationCopy } from '../../lib/spin';
 export function getStaticPaths() {
   const dbPath = join(process.cwd(), 'dumpsters.db');
   const db = new DatabaseSync(dbPath);
-  const stmt = db.prepare('SELECT slug, city, state, state_full FROM locations');
-  const locations = stmt.all() as Array<{ slug: string; city: string; state: string; state_full: string }>;
+  const stmt = db.prepare('SELECT slug FROM locations');
+  const locations = stmt.all() as Array<{ slug: string }>;
   
   return locations.map(loc => ({
-    params: { slug: loc.slug },
-    props: { 
-      cityName: loc.city,
-      stateCode: loc.state,
-      stateFull: loc.state_full
-    }
+    params: { slug: loc.slug }
   }));
 }
 
 const { slug } = Astro.params;
-const { cityName, stateCode, stateFull } = Astro.props;
 
 // Fetch full city records including low/high price ranges from SQLite
 const dbPath = join(process.cwd(), 'dumpsters.db');
@@ -47,6 +41,10 @@ const loc = stmt.get(slug) as {
   avg_low_40yd: number;
   avg_high_40yd: number;
 };
+
+const cityName = loc.city;
+const stateCode = loc.state;
+const stateFull = loc.state_full;
 
 // Spin unique copywriting content deterministically for this location
 const spun = spinLocationCopy({

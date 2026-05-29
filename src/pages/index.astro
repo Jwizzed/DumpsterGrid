@@ -4,13 +4,14 @@ import LeadForm from '../components/LeadForm.astro';
 import { DatabaseSync } from 'node:sqlite';
 import { join } from 'node:path';
 
-// Fetch all locations to populate the autocomplete datalist
+// Fetch top 1,000 locations to populate the autocomplete datalist (optimizes HTML payload and memory)
 const dbPath = join(process.cwd(), 'dumpsters.db');
 const db = new DatabaseSync(dbPath);
 const stmt = db.prepare(`
   SELECT city, state, state_full, population, slug 
   FROM locations 
   ORDER BY population DESC
+  LIMIT 1000
 `);
 const locations = stmt.all() as Array<{ city: string; state: string; state_full: string; population: number; slug: string }>;
 

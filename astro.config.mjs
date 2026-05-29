@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dumpsterflow.com',
+  site: 'https://dumpstergrid.com',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()]

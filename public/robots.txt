@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap Index Declaration
+Sitemap: https://dumpstergrid.com/sitemap-index.xml
