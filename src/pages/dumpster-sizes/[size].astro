@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { DatabaseSync } from 'node:sqlite';
+import { join } from 'node:path';
+
+// Define static paths for standard dumpster sizes
+export function getStaticPaths() {
+  return [
+    { 
+      params: { size: '10-yard' }, 
+      props: { 
+        sizeName: '10-Yard', 
+        tons: 2, 
+        basePrice: 320, 
+        overage: 65, 
+        dimensions: "12' Long x 8' Wide x 3.5' High", 
+        capacity: "Fits approximately 4 standard pickup truck loads.",
+        ideal: "Small kitchen or bathroom remodeling, yard debris removal, basement/garage cleanup, and light roofing updates."
+      } 
+    },
+    { 
+      params: { size: '20-yard' }, 
+      props: { 
+        sizeName: '20-Yard', 
+        tons: 3, 
+        basePrice: 430, 
+        overage: 70, 
+        dimensions: "22' Long x 8' Wide x 4.5' High", 
+        capacity: "Fits approximately 8 standard pickup truck loads.",
+        ideal: "Whole-house cleanouts, carpet or flooring removals, deck demolitions, and medium-scale construction projects."
+      } 
+    },
+    { 
+      params: { size: '30-yard' }, 
+      props: { 
+        sizeName: '30-Yard', 
+        tons: 4, 
+        basePrice: 540, 
+        overage: 75, 
+        dimensions: "22' Long x 8' Wide x 6' High", 
+        capacity: "Fits approximately 12 standard pickup truck loads.",
+        ideal: "Major residential additions, complete siding replacements, commercial waste operations, and large roofing demoblitions."
+      } 
+    },
+    { 
+      params: { size: '40-yard' }, 
+      props: { 
+        sizeName: '40-Yard', 
+        tons: 5, 
+        basePrice: 650, 
+        overage: 80, 
+        dimensions: "22' Long x 8' Wide x 8' High", 
+        capacity: "Fits approximately 16 standard pickup truck loads.",
+        ideal: "Large-scale commercial demolition sites, building roof replacements, industrial waste cleanup, and major construction builds."
+      } 
+    },
+  ];
+}
+
+const { sizeName, tons, basePrice, overage, dimensions, capacity, ideal } = Astro.props;
+
+// Fetch some active cities to display in the side grid
+const dbPath = join(process.cwd(), 'dumpsters.db');
+const db = new DatabaseSync(dbPath);
+const stmt = db.prepare('SELECT city, state, population, slug FROM locations ORDER BY population DESC LIMIT 12');
+const popularCities = stmt.all() as Array<{ city: string; state: string; population: number; slug: string }>;
+---
+
+<Layout 
+  title={`${sizeName} Roll-Off Dumpster Specifications & Dimensions | DumpsterFlow`} 
+  description={`Learn everything about renting a ${sizeName} roll-off dumpster. Compare full dimensions: ${dimensions}, weight capacity: ${tons} tons, and check local prices.`}
+>
+  <!-- Sizing Banner Header -->
+  <section class="relative py-20 px-6 overflow-hidden">
+    <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -right-10 animate-pulse-slow"></div>
+    <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
+    
+    <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
+      <div class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+        📏 Bin Size Specifications
+      </div>
+      <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-white leading-tight">
+        The {sizeName} Roll-Off Dumpster
+      </h1>
+      <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+        Compare full physical dimensions, weight thresholds, and volume capacities to ensure you rent the right container.
+      </p>
+    </div>
+  </section>
+
+  <!-- Spec Grid & Lead Wizard -->
+  <section class="pb-24 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Specifications Column -->
+      <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+        
+        <!-- Physical Specs Card -->
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+          <h3 class="font-display font-extrabold text-2xl text-white border-b border-gray-800 pb-4">
+            Physical Dimensions & Capacity
+          </h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
+              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">📐 Physical Footprint</span>
+              <span class="font-display font-extrabold text-white text-base">{dimensions}</span>
+            </div>
+            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
+              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">🚛 Volume Capacity</span>
+              <span class="font-display font-extrabold text-white text-base">{capacity}</span>
+            </div>
+            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
+              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">⚖️ Included Tonnage</span>
+              <span class="font-display font-extrabold text-white text-base">{tons} Tons Included</span>
+            </div>
+            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
+              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">⚠️ National Avg Overage</span>
+              <span class="font-display font-extrabold text-brand-500 text-base">${overage}/Ton exceeding limit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Best For / Ideal Cases -->
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-4">
+          <h3 class="font-display font-extrabold text-xl text-white">
+            What projects is a {sizeName} dumpster best for?
+          </h3>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            This size plan is highly tailored and optimized for:
+          </p>
+          <div class="p-4 rounded-xl bg-brand-500/5 border border-brand-500/10 text-sm text-gray-300 leading-relaxed">
+            💡 **Best Use Cases:** {ideal}
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Form Column -->
+      <div class="lg:col-span-5 w-full">
+        <LeadForm />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Popular Booking Directory -->
+  <section class="py-20 px-6 bg-dark-surface/40 border-t border-dark-border">
+    <div class="max-w-5xl mx-auto space-y-12">
+      <div class="text-center space-y-3">
+        <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white">
+          Book a {sizeName} Container in Top Cities
+        </h2>
+        <p class="text-gray-400 text-sm">Find localized rates for this size in our highest-volume markets.</p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {popularCities.map(city => (
+          <a 
+            href={`/locations/${city.slug}`}
+            class="px-4 py-3.5 rounded-xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center flex items-center justify-between"
+          >
+            <span>{city.city}, {city.state}</span>
+            <span class="text-brand-500 font-bold">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

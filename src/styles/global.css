@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* Import Premium Typography */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-brand-50: #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-500: #f59e0b; /* High-Vis Amber */
+  --color-brand-600: #d97706;
+  --color-brand-700: #b45309;
+  
+  --color-dark-bg: #07090e;      /* Obsidian Void */
+  --color-dark-surface: #0e131f; /* Premium Deep Charcoal */
+  --color-dark-card: #151c2c;    /* Card Surface */
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+  
+  --font-display: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+  
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-body);
+    background-color: var(--color-dark-bg);
+    color: #f3f4f6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Custom premium design system utility components */
+@layer utilities {
+  .text-glow-amber {
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+  }
+  
+  .glass-card {
+    background: rgba(14, 19, 31, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-dark-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+  
+  .glass-card-interactive {
+    composes: glass-card;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .glass-card-interactive:hover {
+    background: rgba(21, 28, 44, 0.85);
+    border-color: rgba(245, 158, 11, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px 0 rgba(245, 158, 11, 0.08);
+  }
+  
+  .ambient-glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(130px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .ambient-glow-amber {
+    composes: ambient-glow;
+    background: radial-gradient(circle, var(--color-brand-500) 0%, transparent 70%);
+  }
+  
+  .ambient-glow-blue {
+    composes: ambient-glow;
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  }
+}
+
+/* Customized scrollbar for high-end feel */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 5px;
+  border: 2px solid var(--color-dark-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-500);
+}

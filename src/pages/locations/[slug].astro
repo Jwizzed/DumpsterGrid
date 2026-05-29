@@ -1,0 +1,294 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { DatabaseSync } from 'node:sqlite';
+import { join } from 'node:path';
+
+// Define static paths for all 10,000 programmatic city routes
+export function getStaticPaths() {
+  const dbPath = join(process.cwd(), 'dumpsters.db');
+  const db = new DatabaseSync(dbPath);
+  const stmt = db.prepare('SELECT slug, city, state, state_full FROM locations');
+  const locations = stmt.all() as Array<{ slug: string; city: string; state: string; state_full: string }>;
+  
+  return locations.map(loc => ({
+    params: { slug: loc.slug },
+    props: { 
+      cityName: loc.city,
+      stateCode: loc.state,
+      stateFull: loc.state_full
+    }
+  }));
+}
+
+const { slug } = Astro.params;
+const { cityName, stateCode, stateFull } = Astro.props;
+
+// Fetch full city records including low/high price ranges from SQLite
+const dbPath = join(process.cwd(), 'dumpsters.db');
+const db = new DatabaseSync(dbPath);
+const stmt = db.prepare('SELECT * FROM locations WHERE slug = ?');
+const loc = stmt.get(slug) as {
+  city: string;
+  state: string;
+  state_full: string;
+  population: number;
+  permit_required: number;
+  permit_cost: number;
+  landfill_name: string;
+  phone: string;
+  avg_low_10yd: number;
+  avg_high_10yd: number;
+  avg_low_20yd: number;
+  avg_high_20yd: number;
+  avg_low_30yd: number;
+  avg_high_30yd: number;
+  avg_low_40yd: number;
+  avg_high_40yd: number;
+};
+
+// Map price range items for loop rendering
+const pricingPlans = [
+  { size: '10-Yard', low: loc.avg_low_10yd, high: loc.avg_high_10yd, tons: 2.0, overage: 65, desc: 'Ideal for small room cleanouts, minor yard updates, or bathroom remodeling.' },
+  { size: '20-Yard', low: loc.avg_low_20yd, high: loc.avg_high_20yd, tons: 3.0, overage: 70, desc: 'Great for whole-house cleanouts, roof shingle replacement, and carpet removal.' },
+  { size: '30-Yard', low: loc.avg_low_30yd, high: loc.avg_high_30yd, tons: 4.0, overage: 75, desc: 'Designed for home additions, major renovations, or commercial waste needs.' },
+  { size: '40-Yard', low: loc.avg_low_40yd, high: loc.avg_high_40yd, tons: 5.0, overage: 80, desc: 'Recommended for large-scale demolition sites or major construction builds.' }
+];
+
+const popular20ydLow = loc.avg_low_20yd;
+---
+
+<Layout 
+  title={`Cheap Dumpster Rental in ${cityName}, ${stateCode} | Low Price Ranges`} 
+  description={`Rent a roll-off dumpster in ${cityName}, ${stateCode} starting at $${popular20ydLow}. Compare 10-40 yd low & high pricing ranges with zero hidden fees. Call local dispatch now.`}
+  phone={loc.phone}
+>
+  <!-- Hero Section -->
+  <section class="relative py-16 px-6 overflow-hidden">
+    <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -left-10 animate-pulse-slow"></div>
+    <div class="ambient-glow-blue w-[400px] h-[400px] -bottom-10 -right-10 animate-pulse-slow"></div>
+    
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
+      
+      <!-- Content Column -->
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+          📍 Verified Service in {cityName}, {stateCode}
+        </div>
+        
+        <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-[1.15]">
+          Roll-Off Dumpster Rental in <span class="bg-gradient-to-r from-brand-500 to-amber-500 bg-clip-text text-transparent text-glow-amber">{cityName}, {stateCode}</span>
+        </h1>
+        
+        <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          Need a dumpster for a renovation project or commercial cleanout? We coordinate with verified haulers near {cityName} to deliver flat-rate containers with fast next-day drops.
+        </p>
+
+        <!-- Trust bullet tags -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto lg:mx-0 pt-2 text-left">
+          <div class="flex items-center gap-2 text-xs text-gray-300">
+            <span class="text-brand-500 font-bold">✓</span> Local {cityName} dispatch routing
+          </div>
+          <div class="flex items-center gap-2 text-xs text-gray-300">
+            <span class="text-brand-500 font-bold">✓</span> Direct hauling to {loc.landfill_name}
+          </div>
+          <div class="flex items-center gap-2 text-xs text-gray-300">
+            <span class="text-brand-500 font-bold">✓</span> 100% Flat-rate quote guarantees
+          </div>
+          <div class="flex items-center gap-2 text-xs text-gray-300">
+            <span class="text-brand-500 font-bold">✓</span> Next-day dumpster drops available
+          </div>
+        </div>
+
+        <!-- Phone Dispatch Direct CTA -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+          <a href={`tel:${loc.phone}`} class="w-full sm:w-auto px-6 py-4 bg-brand-500 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all hover:bg-brand-600 active:scale-95 shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            Call {loc.phone}
+          </a>
+          <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">or fill out the quote wizard →</span>
+        </div>
+      </div>
+
+      <!-- Form Column -->
+      <div class="lg:col-span-5 w-full">
+        <LeadForm city={cityName} state={stateCode} />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Pricing Cards Matrix -->
+  <section class="py-24 px-6 bg-dark-surface/40 border-y border-dark-border">
+    <div class="max-w-7xl mx-auto space-y-16">
+      
+      <div class="text-center space-y-4 max-w-2xl mx-auto">
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white leading-tight">
+          Flat-Rate Dumpster Costs in {cityName}
+        </h2>
+        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+          No hidden administrative, environmental, or fuel charges. Select your size plan below to request delivery in {cityName}.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {pricingPlans.map(item => (
+          <div class="glass-card-interactive rounded-2xl p-6 flex flex-col justify-between border-dark-border hover:border-brand-500/30">
+            <div class="space-y-4">
+              
+              <!-- Card Header -->
+              <div class="flex items-center justify-between">
+                <span class="font-display font-extrabold text-xl text-white">{item.size}</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 border border-brand-500/20">
+                  {item.tons} Tons
+                </span>
+              </div>
+              
+              <!-- Local Price Range -->
+              <div class="py-2">
+                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider mb-0.5">Estimated Price Range</span>
+                <span class="font-display font-black text-2xl sm:text-3xl text-white">
+                  ${item.low} - ${item.high}
+                </span>
+                <span class="text-xs text-gray-500 block mt-0.5">/ Flat Rate</span>
+              </div>
+
+              <p class="text-xs text-gray-400 leading-relaxed min-h-[50px]">
+                {item.desc}
+              </p>
+
+              <!-- Local Overage and Specs -->
+              <div class="border-t border-gray-800/80 pt-4 space-y-2 text-xs text-gray-400">
+                <div class="flex items-center justify-between">
+                  <span>⚖️ **Weight Limit:**</span>
+                  <span class="font-semibold text-white">{item.tons} Tons Included</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>⚠️ **Overage Fee:**</span>
+                  <span class="font-semibold text-brand-500">${item.overage}/Ton exceeding limit</span>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              type="button"
+              onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('zip-code')?.focus();"
+              class="block w-full text-center mt-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_4px_12px_rgba(245,158,11,0.15)]"
+            >
+              Order {item.size}
+            </button>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Permit Guide & Landfill Context -->
+  <section class="py-24 px-6 max-w-5xl mx-auto space-y-16">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Right-Of-Way Permit Card -->
+      <div class="md:col-span-7 glass-card rounded-3xl p-8 flex flex-col justify-between border-dark-border">
+        <div class="space-y-4">
+          <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+            📋 Permit Compliance Guide
+          </div>
+          
+          <h3 class="font-display font-extrabold text-2xl text-white">
+            Do I need a dumpster permit in {cityName}?
+          </h3>
+
+          <p class="text-sm text-gray-400 leading-relaxed">
+            If you place your roll-off container entirely on your private property (e.g. your driveway, yard, or loading dock), **no permit is required**. 
+          </p>
+
+          <!-- Permit alert status -->
+          {loc.permit_required === 1 ? (
+            <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs leading-relaxed text-gray-300">
+              ⚠️ **Street Placement Alert:** {cityName} requires a **Right-of-Way (ROW) Permit** if the dumpster must sit on public streets, sidewalks, or easements. The estimated application fee is **${loc.permit_cost.toFixed(2)}**. Our dispatch team can assist you with local city applications.
+            </div>
+          ) : (
+            <div class="p-4 rounded-xl bg-green-500/5 border border-green-500/20 text-xs leading-relaxed text-gray-300">
+              ✓ **Street Placement Rules:** {cityName} has highly relaxed public street rules. Typically, no complex ROW permit is required for residential streets, provided the dumpster doesn't block hydrants, driveways, or public traffic flows.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Local Landfill Card -->
+      <div class="md:col-span-5 glass-card rounded-3xl p-8 flex flex-col justify-between border-dark-border relative overflow-hidden">
+        <div class="space-y-4">
+          <div class="inline-block px-3 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 font-display font-bold text-xs uppercase tracking-wider">
+            ♻️ Landfill Direct
+          </div>
+          
+          <h3 class="font-display font-extrabold text-2xl text-white">
+            Environmental Disposal
+          </h3>
+
+          <p class="text-sm text-gray-400 leading-relaxed">
+            DumpsterFlow is committed to ecological responsibility. All sorted recycling material and solid construction debris collected in {cityName} is hauled directly to:
+          </p>
+
+          <div class="p-4 rounded-xl bg-dark-bg border border-dark-border text-center">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Local Processing Hub</span>
+            <span class="font-display font-extrabold text-sm text-white">{loc.landfill_name}</span>
+            <span class="block text-[10px] text-gray-400 mt-1">Servicing the Greater {cityName} Area</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Local FAQ Accordions -->
+  <section class="py-24 px-6 bg-dark-surface/20 border-t border-dark-border">
+    <div class="max-w-3xl mx-auto space-y-12">
+      
+      <div class="text-center space-y-4">
+        <h2 class="font-display font-extrabold text-3xl text-white">
+          Frequently Asked Questions in {cityName}
+        </h2>
+        <p class="text-gray-400 text-sm">Everything you need to know about renting a dumpster locally.</p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- Q1 -->
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h4 class="font-display font-bold text-white text-base">
+            What is the typical rental period for a dumpster in {cityName}?
+          </h4>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Our standard local flat-rate packages include a **10-day rental period**. If you finish early, simply call local dispatch at {loc.phone} and we will schedule an immediate pickup. Extended rentals can be arranged for a nominal daily fee.
+          </p>
+        </div>
+
+        <!-- Q2 -->
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h4 class="font-display font-bold text-white text-base">
+            What materials are restricted from entering the dumpster?
+          </h4>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            By local environmental code, you cannot place hazardous waste, toxic chemicals, wet paint, batteries, flammable materials, raw medical waste, or propane tanks into the dumpster. Tires and refrigerators require special processing and must be cleared with dispatch beforehand.
+          </p>
+        </div>
+
+        <!-- Q3 -->
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h4 class="font-display font-bold text-white text-base">
+            How do I avoid overage fees?
+          </h4>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Overage fees are assessed only if the weight of your debris exceeds the included tonnage allowance (e.g. 3 tons for a 20-Yard dumpster). To avoid fees, keep the dumpster covered during heavy rainstorms to prevent water weight, and make sure not to fill the container past the "Maximum Load" indicator line.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</Layout>

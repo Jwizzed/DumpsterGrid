@@ -1,0 +1,418 @@
+---
+interface Props {
+  city?: string;
+  state?: string;
+}
+
+const { city = "Your Local Area", state = "" } = Astro.props;
+---
+
+<div class="glass-card rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-2xl">
+  
+  <!-- Glowing header line -->
+  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-500 to-amber-600"></div>
+  
+  <!-- Progress Header -->
+  <div class="mb-6">
+    <div class="flex items-center justify-between text-xs font-display font-semibold uppercase tracking-wider mb-2.5">
+      <span class="text-brand-500 font-bold" id="step-indicator">Step 1 of 3</span>
+      <span class="text-gray-400">Requesting local quotes</span>
+    </div>
+    <!-- Progress bar -->
+    <div class="h-1.5 w-full bg-dark-bg rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-amber-500 rounded-full transition-all duration-500 ease-out" style="width: 33%"></div>
+    </div>
+  </div>
+
+  <!-- Form container -->
+  <form id="lead-capture-form" class="space-y-6">
+    <!-- Hidden fields for location routing -->
+    <input type="hidden" name="city" value={city} />
+    <input type="hidden" name="state" value={state} />
+
+    <!-- STEP 1: Project Details & Zip Code -->
+    <div id="form-step-1" class="space-y-5 transition-opacity duration-300">
+      <div class="text-center sm:text-left">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+          Rent a Dumpster in <span class="text-brand-500 text-glow-amber">{city}</span>
+        </h3>
+        <p class="text-xs text-gray-400">Tell us about your project to unlock real-time local hauling rates.</p>
+      </div>
+
+      <div class="space-y-3.5">
+        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Select Project Type</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+            <input type="radio" name="project_type" value="Residential Cleanout" class="sr-only" checked />
+            <span class="text-lg mb-1">🏠</span>
+            <span class="text-xs font-semibold text-white">Residential</span>
+          </label>
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+            <input type="radio" name="project_type" value="Construction / Demo" class="sr-only" />
+            <span class="text-lg mb-1">🔨</span>
+            <span class="text-xs font-semibold text-white">Construction</span>
+          </label>
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+            <input type="radio" name="project_type" value="Commercial Waste" class="sr-only" />
+            <span class="text-lg mb-1">🏢</span>
+            <span class="text-xs font-semibold text-white">Commercial</span>
+          </label>
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+            <input type="radio" name="project_type" value="Roofing Project" class="sr-only" />
+            <span class="text-lg mb-1">🏠</span>
+            <span class="text-xs font-semibold text-white">Roofing</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="zip-code" class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Delivery Zip Code</label>
+        <input 
+          type="text" 
+          id="zip-code" 
+          name="zip_code" 
+          placeholder="e.g. 78701" 
+          maxlength="5"
+          required
+          class="w-full px-4 py-3.5 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-display font-semibold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all placeholder:text-gray-600 text-center tracking-wider text-lg"
+        />
+        <p id="zip-error" class="hidden text-xs text-red-500 mt-1 font-semibold">⚠️ Please enter a valid 5-digit zip code.</p>
+      </div>
+
+      <button 
+        type="button" 
+        id="btn-next-1" 
+        class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_30px_rgba(245,158,11,0.35)] flex items-center justify-center gap-2 group cursor-pointer"
+      >
+        Select Dumpster Size
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- STEP 2: Size Preference -->
+    <div id="form-step-2" class="hidden space-y-5 transition-opacity duration-300">
+      <div class="text-center sm:text-left">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+          Select Your Dumpster Size
+        </h3>
+        <p class="text-xs text-gray-400">Select the size that best matches your waste volume.</p>
+      </div>
+
+      <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <input type="radio" name="dumpster_size" value="10-Yard" class="sr-only" checked />
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-brand-500 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500"></div>
+          </div>
+          <div>
+            <span class="block font-display font-bold text-sm text-white">10-Yard Roll-Off</span>
+            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~4 pickup truck loads. Best for minor cleanouts.</span>
+          </div>
+        </label>
+        
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <input type="radio" name="dumpster_size" value="20-Yard" class="sr-only" />
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          </div>
+          <div>
+            <span class="block font-display font-bold text-sm text-white">20-Yard Roll-Off</span>
+            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~8 pickup truck loads. Ideal for kitchen/deck remodels.</span>
+          </div>
+        </label>
+
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <input type="radio" name="dumpster_size" value="30-Yard" class="sr-only" />
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          </div>
+          <div>
+            <span class="block font-display font-bold text-sm text-white">30-Yard Roll-Off</span>
+            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~12 pickup truck loads. Great for additions or demolition.</span>
+          </div>
+        </label>
+
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <input type="radio" name="dumpster_size" value="40-Yard" class="sr-only" />
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          </div>
+          <div>
+            <span class="block font-display font-bold text-sm text-white">40-Yard Roll-Off</span>
+            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~16 pickup truck loads. Designed for major construction.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <button 
+          type="button" 
+          id="btn-back-2" 
+          class="col-span-1 py-4 bg-dark-surface border border-dark-border text-gray-300 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-dark-bg hover:text-white transition-all cursor-pointer"
+        >
+          Back
+        </button>
+        <button 
+          type="button" 
+          id="btn-next-2" 
+          class="col-span-2 py-4 bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-2 cursor-pointer"
+        >
+          Enter Contact Info
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Contact & Submit -->
+    <div id="form-step-3" class="hidden space-y-5 transition-opacity duration-300">
+      <div class="text-center sm:text-left">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+          Where Should We Send the Quote?
+        </h3>
+        <p class="text-xs text-gray-400">Our dispatch team will connect you with a verified, low-cost local hauler.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="contact-name" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Your Name</label>
+          <input 
+            type="text" 
+            id="contact-name" 
+            name="contact_name" 
+            placeholder="John Doe" 
+            required
+            class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="contact-phone" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Phone Number</label>
+            <input 
+              type="tel" 
+              id="contact-phone" 
+              name="contact_phone" 
+              placeholder="(512) 555-0199" 
+              required
+              class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+            />
+          </div>
+          <div>
+            <label for="contact-email" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Email Address</label>
+            <input 
+              type="email" 
+              id="contact-email" 
+              name="contact_email" 
+              placeholder="john@example.com" 
+              required
+              class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <button 
+          type="button" 
+          id="btn-back-3" 
+          class="col-span-1 py-4 bg-dark-surface border border-dark-border text-gray-300 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-dark-bg hover:text-white transition-all cursor-pointer"
+        >
+          Back
+        </button>
+        <button 
+          type="submit" 
+          id="btn-submit" 
+          class="col-span-2 py-4 bg-gradient-to-r from-brand-500 to-amber-600 hover:from-brand-600 hover:to-amber-700 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.3)] hover:shadow-[0_6px_30px_rgba(245,158,11,0.4)] flex items-center justify-center gap-2 cursor-pointer"
+        >
+          Get Free Quote
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </button>
+      </div>
+      
+      <p class="text-[10px] text-gray-500 text-center">
+        By clicking "Get Free Quote", you consent to receiving dispatch calls/texts regarding waste service quotes. No marketing spam.
+      </p>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div id="form-success" class="hidden text-center py-8 space-y-5 transition-all">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-500/10 text-brand-500 border border-brand-500/30 text-3xl animate-bounce">
+        ✓
+      </div>
+      <div>
+        <h3 class="font-display font-extrabold text-2xl text-white mb-2 leading-snug">
+          Quote Dispatch Initiated!
+        </h3>
+        <p class="text-sm text-brand-100 max-w-sm mx-auto leading-relaxed">
+          We have matched your project with the lowest-rate local hauler in <span class="font-bold underline">{city}</span>.
+        </p>
+      </div>
+      <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border text-xs text-gray-400 max-w-sm mx-auto leading-relaxed">
+        📞 **Expect a call in 10-15 minutes** from a local dispatcher to verify delivery instructions, drop-off placement, and coordinate your permit details.
+      </div>
+    </div>
+  </form>
+</div>
+
+<style>
+  .project-type-card:has(input:checked) {
+    border-color: var(--color-brand-500);
+    background: rgba(245, 158, 11, 0.08);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.05);
+  }
+  
+  .size-card:has(input:checked) {
+    border-color: var(--color-brand-500);
+    background: rgba(245, 158, 11, 0.08);
+  }
+</style>
+
+<!-- Client Side Multi-step Logic -->
+<script>
+  function initializeForm() {
+    const form = document.getElementById('lead-capture-form');
+    if (!form) return;
+
+    // Steps
+    const step1 = document.getElementById('form-step-1');
+    const step2 = document.getElementById('form-step-2');
+    const step3 = document.getElementById('form-step-3');
+    const success = document.getElementById('form-success');
+
+    // Controls
+    const btnNext1 = document.getElementById('btn-next-1');
+    const btnNext2 = document.getElementById('btn-next-2');
+    const btnBack2 = document.getElementById('btn-back-2');
+    const btnBack3 = document.getElementById('btn-back-3');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    // Inputs
+    const zipInput = document.getElementById('zip-code') as HTMLInputElement;
+    const zipError = document.getElementById('zip-error');
+
+    // Progress
+    const stepIndicator = document.getElementById('step-indicator');
+    const progressBar = document.getElementById('progress-bar');
+
+    // Radios styling hooks
+    const projectCards = document.querySelectorAll('.project-type-card');
+    projectCards.forEach(card => {
+      const radio = card.querySelector('input[type="radio"]') as HTMLInputElement;
+      card.addEventListener('click', () => {
+        projectCards.forEach(c => {
+          c.classList.remove('border-brand-500', 'bg-brand-500/10');
+          c.classList.add('border-dark-border', 'bg-dark-surface/50');
+        });
+        radio.checked = true;
+        card.classList.remove('border-dark-border', 'bg-dark-surface/50');
+        card.classList.add('border-brand-500', 'bg-brand-500/10');
+      });
+    });
+
+    const sizeCards = document.querySelectorAll('.size-card');
+    sizeCards.forEach(card => {
+      const radio = card.querySelector('input[type="radio"]') as HTMLInputElement;
+      card.addEventListener('click', () => {
+        sizeCards.forEach(c => {
+          c.classList.remove('border-brand-500', 'bg-brand-500/10');
+          c.classList.add('border-dark-border', 'bg-dark-surface/50');
+          const circle = c.querySelector('.inner-circle');
+          const border = c.querySelector('.rounded-full');
+          if (circle) circle.classList.add('hidden');
+          if (border) {
+            border.classList.remove('border-brand-500');
+            border.classList.add('border-gray-600');
+          }
+        });
+        radio.checked = true;
+        card.classList.remove('border-dark-border', 'bg-dark-surface/50');
+        card.classList.add('border-brand-500', 'bg-brand-500/10');
+        const circle = card.querySelector('.inner-circle');
+        const border = card.querySelector('.rounded-full');
+        if (circle) circle.classList.remove('hidden');
+        if (border) {
+          border.classList.remove('border-gray-600');
+          border.classList.add('border-brand-500');
+        }
+      });
+    });
+
+    // Step 1 -> Step 2
+    btnNext1?.addEventListener('click', () => {
+      const zipVal = zipInput.value.trim();
+      if (!/^\d{5}$/.test(zipVal)) {
+        zipError?.classList.remove('hidden');
+        zipInput.focus();
+        return;
+      }
+      zipError?.classList.add('hidden');
+
+      step1?.classList.add('hidden');
+      step2?.classList.remove('hidden');
+      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3";
+      if (progressBar) progressBar.style.width = "66%";
+    });
+
+    zipInput?.addEventListener('input', () => {
+      if (/^\d{5}$/.test(zipInput.value)) {
+        zipError?.classList.add('hidden');
+      }
+    });
+
+    // Step 2 -> Step 3
+    btnNext2?.addEventListener('click', () => {
+      step2?.classList.add('hidden');
+      step3?.classList.remove('hidden');
+      if (stepIndicator) stepIndicator.textContent = "Step 3 of 3";
+      if (progressBar) progressBar.style.width = "100%";
+    });
+
+    // Step 2 -> Step 1 (Back)
+    btnBack2?.addEventListener('click', () => {
+      step2?.classList.add('hidden');
+      step1?.classList.remove('hidden');
+      if (stepIndicator) stepIndicator.textContent = "Step 1 of 3";
+      if (progressBar) progressBar.style.width = "33%";
+    });
+
+    // Step 3 -> Step 2 (Back)
+    btnBack3?.addEventListener('click', () => {
+      step3?.classList.add('hidden');
+      step2?.classList.remove('hidden');
+      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3";
+      if (progressBar) progressBar.style.width = "66%";
+    });
+
+    // Submit Action
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Select form parameters
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      console.log("Lead captured: ", data);
+
+      // Trigger visual success transition
+      step3?.classList.add('hidden');
+      success?.classList.remove('hidden');
+      
+      // Update sitemaps or headers
+      if (stepIndicator) stepIndicator.textContent = "Completed";
+      if (progressBar) {
+        progressBar.classList.remove('from-brand-500', 'to-amber-500');
+        progressBar.classList.add('bg-green-500');
+        progressBar.style.width = "100%";
+      }
+    });
+  }
+
+  // Initialize on initial page load and swap
+  initializeForm();
+  document.addEventListener('astro:page-load', initializeForm);
+</script>

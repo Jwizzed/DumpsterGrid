@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { DatabaseSync } from 'node:sqlite';
+import { join } from 'node:path';
+
+// Fetch states and cities from SQLite vault
+const dbPath = join(process.cwd(), 'dumpsters.db');
+const db = new DatabaseSync(dbPath);
+
+const statesStmt = db.prepare('SELECT DISTINCT state, state_full FROM locations ORDER BY state_full ASC');
+const states = statesStmt.all() as Array<{ state: string; state_full: string }>;
+
+const citiesStmt = db.prepare('SELECT city, state, population, slug FROM locations ORDER BY city ASC');
+const cities = citiesStmt.all() as Array<{ city: string; state: string; population: number; slug: string }>;
+
+// Group cities by state
+const stateGroups = states.map(s => {
+  return {
+    state: s.state,
+    state_full: s.state_full,
+    cities: cities.filter(c => c.state === s.state)
+  };
+});
+---
+
+<Layout 
+  title="Local Roll-Off Dumpster Service Directory | DumpsterFlow" 
+  description="Explore our complete state-by-state directory of locations for roll-off dumpster rentals. Find localized dumpster cost plans, sizes, and permits."
+>
+  <!-- Directory Header -->
+  <section class="relative py-20 px-6 overflow-hidden">
+    <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -right-10 animate-pulse-slow"></div>
+    <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
+    
+    <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
+      <div class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+        🌍 National Directory
+      </div>
+      <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-white leading-tight">
+        Local Dumpster Service Areas
+      </h1>
+      <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+        Select your state below to find affordable local roll-off bin haulers, permit requirements, and pricing schedules in your city.
+      </p>
+    </div>
+  </section>
+
+  <!-- States & Cities Grid -->
+  <section class="pb-24 px-6 max-w-5xl mx-auto relative z-10">
+    <div class="space-y-12">
+      {stateGroups.map(group => (
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+          
+          <!-- State Title Header -->
+          <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+            <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white flex items-center gap-3">
+              <span class="text-brand-500 font-normal select-none">🗺️</span>
+              {group.state_full}
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-bg border border-dark-border text-gray-400">
+                {group.state}
+              </span>
+            </h2>
+            <a 
+              href={`/locations/${group.state.toLowerCase()}`}
+              class="text-xs font-bold text-brand-500 hover:text-brand-600 transition-colors uppercase tracking-wider flex items-center gap-1 group"
+            >
+              All {group.state_full} Cities
+              <span class="transition-transform group-hover:translate-x-0.5">→</span>
+            </a>
+          </div>
+
+          <!-- Cities Link Grids -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {group.cities.map(city => (
+              <a 
+                href={`/locations/${city.slug}`}
+                class="px-4 py-3 rounded-xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center sm:text-left flex items-center justify-between"
+              >
+                <span>{city.city}</span>
+                <span class="hidden sm:inline-block text-[10px] text-gray-600 font-display">
+                  {city.population > 1000000 ? 'Metro' : 'City'}
+                </span>
+              </a>
+            ))}
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>
