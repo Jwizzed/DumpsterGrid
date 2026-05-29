@@ -35,6 +35,15 @@ const cities = stmt.all(stateCode) as Array<{ city: string; population: number; 
     <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
     
     <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center justify-center gap-2 text-xs font-semibold text-gray-500 mb-4 uppercase tracking-wider select-none">
+        <a href="/" class="hover:text-brand-500 transition-colors">Home</a>
+        <span>/</span>
+        <a href="/locations" class="hover:text-brand-500 transition-colors">Locations</a>
+        <span>/</span>
+        <span class="text-gray-300">{stateFull} Directory</span>
+      </nav>
+
       <div class="inline-block px-3.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
         📍 {stateCode} State Directory
       </div>

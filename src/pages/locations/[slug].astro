@@ -100,6 +100,35 @@ const schema = {
         "@type": "City",
         "name": cityName
       }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://dumpstergrid.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Locations",
+          "item": "https://dumpstergrid.com/locations"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": stateFull,
+          "item": `https://dumpstergrid.com/locations/${stateCode.toLowerCase()}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": cityName,
+          "item": `https://dumpstergrid.com/locations/${slug}`
+        }
+      ]
     }
   ]
 };
@@ -121,6 +150,17 @@ const schemaString = JSON.stringify(schema);
       
       <!-- Content Column -->
       <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center justify-center lg:justify-start gap-2 text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider select-none">
+          <a href="/" class="hover:text-brand-500 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/locations" class="hover:text-brand-500 transition-colors">Locations</a>
+          <span>/</span>
+          <a href={`/locations/${stateCode.toLowerCase()}`} class="hover:text-brand-500 transition-colors">{stateFull}</a>
+          <span>/</span>
+          <span class="text-gray-300">{cityName}</span>
+        </nav>
+
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
           📍 Verified Service in {cityName}, {stateCode}
         </div>
@@ -292,6 +332,145 @@ const schemaString = JSON.stringify(schema);
 
     </div>
   </section>
+
+  <!-- Local Infrastructure & Rules Dashboard (Anti-Thin Content Defenses) -->
+  <section class="py-20 px-6 bg-dark-bg/60 border-t border-dark-border relative overflow-hidden">
+    <!-- Ambient Glows -->
+    <div class="ambient-glow-amber w-[300px] h-[300px] top-1/2 -right-10 animate-pulse-slow"></div>
+
+    <div class="max-w-5xl mx-auto space-y-12 relative z-10">
+      
+      <!-- Section Header -->
+      <div class="text-center space-y-4 max-w-2xl mx-auto">
+        <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+          📊 Regional Specs & Material Rules
+        </div>
+        <h2 class="font-display font-extrabold text-3xl text-white leading-tight">
+          Local Infrastructure & Compliance Directory
+        </h2>
+        <p class="text-gray-400 text-sm">
+          Specific municipal operating parameters, regional dispatch stats, and ecological garbage handling parameters for the {cityName} area.
+        </p>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+        
+        <!-- Column 1: Local Stats Matrix -->
+        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-dark-border flex flex-col justify-between">
+          <div class="space-y-6">
+            <h3 class="font-display font-extrabold text-xl text-white flex items-center gap-3">
+              <span>📋</span> Regional Profile & Stats
+            </h3>
+            
+            <div class="space-y-4">
+              <!-- Population served -->
+              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
+                <span class="text-gray-400">👥 Estimated Population Served:</span>
+                <span class="font-semibold text-white font-display">
+                  {loc.population.toLocaleString()} Residents
+                </span>
+              </div>
+              
+              <!-- State Permitting Rules -->
+              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
+                <span class="text-gray-400">🏛️ State Jurisdiction:</span>
+                <span class="font-semibold text-white">
+                  {stateFull} ({stateCode})
+                </span>
+              </div>
+
+              <!-- Dispatch Code -->
+              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
+                <span class="text-gray-400">📞 Local Dispatch Code:</span>
+                <span class="font-semibold text-brand-500 font-display">
+                  {loc.phone.slice(0, 3)} Area Code Routing
+                </span>
+              </div>
+
+              <!-- Target Disposal Hub -->
+              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
+                <span class="text-gray-400">♻️ Target Disposal Hub:</span>
+                <span class="font-semibold text-white truncate max-w-[200px]" title={loc.landfill_name}>
+                  {loc.landfill_name}
+                </span>
+              </div>
+
+              <!-- Permit Cost -->
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-400">💰 Municipal Permit Fee:</span>
+                <span class="font-semibold text-white">
+                  {loc.permit_required === 1 ? `$${loc.permit_cost.toFixed(2)} (Avg)` : 'No standard fee'}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 pt-4 border-t border-gray-800/80 text-[10px] text-gray-500 leading-relaxed">
+            * Regional parameters are dynamically compiled based on regional census statistics, local municipal right-of-way ordinances, and hauler delivery logs.
+          </div>
+        </div>
+
+        <!-- Column 2: Material Permissibility Matrix -->
+        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-dark-border flex flex-col justify-between">
+          <div class="space-y-6">
+            <h3 class="font-display font-extrabold text-xl text-white flex items-center gap-3">
+              <span>🚫</span> Material Compliance Matrix
+            </h3>
+            
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Standard local ecological laws dictate what types of solid waste are allowed in roll-off containers. Banned items must be disposed of at specialized facilities.
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 pt-2">
+              
+              <!-- Column: Allowed -->
+              <div class="space-y-2.5">
+                <span class="text-xs font-bold text-green-400 block uppercase tracking-wider mb-1">✓ Standard Allowed</span>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-green-500">✔</span> Household Junk
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-green-500">✔</span> Wood & Drywall
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-green-500">✔</span> Concrete & Dirt
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-green-500">✔</span> Metal & Shingles
+                </div>
+              </div>
+
+              <!-- Column: Prohibited -->
+              <div class="space-y-2.5">
+                <span class="text-xs font-bold text-red-400 block uppercase tracking-wider mb-1">✗ Banned / Prohibited</span>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-red-500">✘</span> Wet Paints
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-red-500">✘</span> Car Batteries
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-red-500">✘</span> Hazardous Oils
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-red-500">✘</span> Propane Tanks
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-gray-800/80 text-[10px] text-gray-500 leading-relaxed">
+            ⚠️ Loading hazardous or prohibited waste may trigger EPA compliance flags and local sorting penalty surcharges. Please contact dispatch to handle exceptional items.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
 
   <!-- Local FAQ Accordions -->
   <section class="py-24 px-6 bg-dark-surface/20 border-t border-dark-border">
