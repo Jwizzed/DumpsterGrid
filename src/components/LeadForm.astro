@@ -7,7 +7,7 @@ interface Props {
 const { city = "Your Local Area", state = "" } = Astro.props;
 ---
 
-<div class="glass-card rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-2xl">
+<div class="glass-card rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-2xl border-2 border-brand-500/20">
   
   <!-- Glowing header line -->
   <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-500 to-amber-600"></div>
@@ -34,9 +34,9 @@ const { city = "Your Local Area", state = "" } = Astro.props;
     <div id="form-step-1" class="space-y-5 transition-opacity duration-300">
       <div class="text-center sm:text-left">
         <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
-          Rent a Dumpster in <span class="text-brand-500 text-glow-amber">{city}</span>
+          Check Next-Day Dumpster Availability
         </h3>
-        <p class="text-xs text-gray-400">Tell us about your project to unlock real-time local hauling rates.</p>
+        <p class="text-xs text-gray-400 font-semibold leading-relaxed">Takes 45 seconds. No credit card required to view local dispatch schedule.</p>
       </div>
 
       <div class="space-y-3.5">
@@ -238,6 +238,19 @@ const { city = "Your Local Area", state = "" } = Astro.props;
       <p class="text-[10px] text-gray-500 text-center">
         By clicking "Get Free Quote", you consent to receiving dispatch calls/texts regarding waste service quotes. No marketing spam.
       </p>
+
+      <!-- Trust Signals Micro-Badges -->
+      <div class="pt-4 flex items-center justify-between gap-2 text-[10px] text-gray-500 border-t border-gray-800/80 mt-4 select-none">
+        <div class="flex items-center gap-1">
+          <span class="text-brand-500 font-bold">🔒</span> 256-Bit Secure Data
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-brand-500 font-bold">⏱️</span> No Phone Spam Guarantee
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-brand-500 font-bold">👷</span> Verified Local Haulers
+        </div>
+      </div>
     </div>
 
     <!-- SUCCESS MESSAGE -->
