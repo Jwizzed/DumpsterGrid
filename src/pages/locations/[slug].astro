@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import LeadForm from '../../components/LeadForm.astro';
 import { DatabaseSync } from 'node:sqlite';
 import { join } from 'node:path';
+import { spinLocationCopy } from '../../lib/spin';
 
 // Define static paths for all 10,000 programmatic city routes
 export function getStaticPaths() {
@@ -47,6 +48,17 @@ const loc = stmt.get(slug) as {
   avg_high_40yd: number;
 };
 
+// Spin unique copywriting content deterministically for this location
+const spun = spinLocationCopy({
+  city: cityName,
+  stateCode: stateCode,
+  stateFull: stateFull,
+  slug: slug || '',
+  landfillName: loc.landfill_name,
+  permitCost: loc.permit_cost,
+  permitRequired: loc.permit_required
+});
+
 // Map price range items for loop rendering
 const pricingPlans = [
   { size: '10-Yard', low: loc.avg_low_10yd, high: loc.avg_high_10yd, tons: 2.0, overage: 65, desc: 'Ideal for small room cleanouts, minor yard updates, or bathroom remodeling.' },
@@ -56,12 +68,51 @@ const pricingPlans = [
 ];
 
 const popular20ydLow = loc.avg_low_20yd;
+
+// Construct dynamic JSON-LD Schema to boost localized search results
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "name": `Roll-Off Dumpster Rental in ${cityName}, ${stateCode}`,
+      "description": `Affordable flat-rate roll-off dumpster rentals in ${cityName}, ${stateCode}. Compare dimensions, capacities, and costs for 10-Yard, 20-Yard, 30-Yard, and 40-Yard dumpsters.`,
+      "image": "https://dumpsterflow.com/favicon.svg",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "USD",
+        "lowPrice": loc.avg_low_10yd,
+        "highPrice": loc.avg_high_40yd,
+        "offerCount": "4"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "name": `DumpsterFlow - Dumpster Rental in ${cityName}`,
+      "description": `Connecting construction managers and residential property owners with low-cost local dumpster rental haulers near ${cityName}, ${stateCode}.`,
+      "telephone": loc.phone,
+      "image": "https://dumpsterflow.com/favicon.svg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": cityName,
+        "addressRegion": stateCode,
+        "addressCountry": "US"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": cityName
+      }
+    }
+  ]
+};
+const schemaString = JSON.stringify(schema);
 ---
 
 <Layout 
   title={`Cheap Dumpster Rental in ${cityName}, ${stateCode} | Low Price Ranges`} 
   description={`Rent a roll-off dumpster in ${cityName}, ${stateCode} starting at $${popular20ydLow}. Compare 10-40 yd low & high pricing ranges with zero hidden fees. Call local dispatch now.`}
   phone={loc.phone}
+  schema={schemaString}
 >
   <!-- Hero Section -->
   <section class="relative py-16 px-6 overflow-hidden">
@@ -81,7 +132,7 @@ const popular20ydLow = loc.avg_low_20yd;
         </h1>
         
         <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-          Need a dumpster for a renovation project or commercial cleanout? We coordinate with verified haulers near {cityName} to deliver flat-rate containers with fast next-day drops.
+          {spun.heroIntro}
         </p>
 
         <!-- Trust bullet tags -->
@@ -129,7 +180,7 @@ const popular20ydLow = loc.avg_low_20yd;
           Flat-Rate Dumpster Costs in {cityName}
         </h2>
         <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
-          No hidden administrative, environmental, or fuel charges. Select your size plan below to request delivery in {cityName}.
+          {spun.pricingIntro}
         </p>
       </div>
 
@@ -208,11 +259,11 @@ const popular20ydLow = loc.avg_low_20yd;
           <!-- Permit alert status -->
           {loc.permit_required === 1 ? (
             <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs leading-relaxed text-gray-300">
-              ⚠️ **Street Placement Alert:** {cityName} requires a **Right-of-Way (ROW) Permit** if the dumpster must sit on public streets, sidewalks, or easements. The estimated application fee is **${loc.permit_cost.toFixed(2)}**. Our dispatch team can assist you with local city applications.
+              ⚠️ **Street Placement Alert:** {spun.permitDetails}
             </div>
           ) : (
             <div class="p-4 rounded-xl bg-green-500/5 border border-green-500/20 text-xs leading-relaxed text-gray-300">
-              ✓ **Street Placement Rules:** {cityName} has highly relaxed public street rules. Typically, no complex ROW permit is required for residential streets, provided the dumpster doesn't block hydrants, driveways, or public traffic flows.
+              ✓ **Street Placement Rules:** {spun.permitDetails}
             </div>
           )}
         </div>
@@ -230,7 +281,7 @@ const popular20ydLow = loc.avg_low_20yd;
           </h3>
 
           <p class="text-sm text-gray-400 leading-relaxed">
-            DumpsterFlow is committed to ecological responsibility. All sorted recycling material and solid construction debris collected in {cityName} is hauled directly to:
+            {spun.landfillDetails}
           </p>
 
           <div class="p-4 rounded-xl bg-dark-bg border border-dark-border text-center">

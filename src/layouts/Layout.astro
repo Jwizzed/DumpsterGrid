@@ -5,12 +5,14 @@ interface Props {
   title: string;
   description: string;
   phone?: string;
+  schema?: string;
 }
 
 const { 
   title, 
   description, 
-  phone = "800-508-4000" 
+  phone = "800-508-4000",
+  schema
 } = Astro.props;
 
 // Canonical URL computation to guarantee search equity preservation
@@ -44,6 +46,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
+
+    <!-- JSON-LD Dynamic Schema Injection -->
+    {schema && <script type="application/ld+json" set:html={schema} />}
   </head>
   <body class="bg-dark-bg text-gray-100 min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-dark-bg">
     

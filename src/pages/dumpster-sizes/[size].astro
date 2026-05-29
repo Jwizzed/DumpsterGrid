@@ -65,11 +65,27 @@ const dbPath = join(process.cwd(), 'dumpsters.db');
 const db = new DatabaseSync(dbPath);
 const stmt = db.prepare('SELECT city, state, population, slug FROM locations ORDER BY population DESC LIMIT 12');
 const popularCities = stmt.all() as Array<{ city: string; state: string; population: number; slug: string }>;
+
+// Construct dynamic Product schema for the dumpster size
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": `${sizeName} Roll-Off Dumpster`,
+  "description": `Learn physical specifications, dimensions, and capacities for the standard ${sizeName} roll-off waste container. Physical size: ${dimensions}. Weight limit: ${tons} tons included.`,
+  "image": "https://dumpsterflow.com/favicon.svg",
+  "offers": {
+    "@type": "Offer",
+    "price": basePrice,
+    "priceCurrency": "USD"
+  }
+};
+const schemaString = JSON.stringify(schema);
 ---
 
 <Layout 
   title={`${sizeName} Roll-Off Dumpster Specifications & Dimensions | DumpsterFlow`} 
   description={`Learn everything about renting a ${sizeName} roll-off dumpster. Compare full dimensions: ${dimensions}, weight capacity: ${tons} tons, and check local prices.`}
+  schema={schemaString}
 >
   <!-- Sizing Banner Header -->
   <section class="relative py-20 px-6 overflow-hidden">
