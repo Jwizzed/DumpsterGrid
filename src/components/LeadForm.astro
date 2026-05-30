@@ -8,20 +8,20 @@ interface Props {
 const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
 ---
 
-<div class="glass-card rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-2xl border-2 border-brand-500/20">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg mx-auto relative overflow-hidden shadow-xl border border-slate-200">
   
   <!-- Glowing header line -->
-  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-500 to-amber-600"></div>
+  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#f07c00] to-orange-500"></div>
   
   <!-- Progress Header -->
   <div class="mb-6">
     <div class="flex items-center justify-between text-xs font-display font-semibold uppercase tracking-wider mb-2.5">
-      <span class="text-brand-500 font-bold" id="step-indicator">Step 1 of 3</span>
-      <span class="text-gray-400">Requesting local quotes</span>
+      <span class="text-[#f07c00] font-bold" id="step-indicator">Step 1 of 3 (33% Completed)</span>
+      <span class="text-slate-500">Requesting local quotes</span>
     </div>
     <!-- Progress bar -->
-    <div class="h-1.5 w-full bg-dark-bg rounded-full overflow-hidden">
-      <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-amber-500 rounded-full transition-all duration-500 ease-out" style="width: 33%"></div>
+    <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-gradient-to-r from-[#f07c00] to-orange-500 rounded-full transition-all duration-500 ease-out" style="width: 33%"></div>
     </div>
   </div>
 
@@ -36,52 +36,52 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
       
       {/* Dynamic Price Anchor Banner */}
       {startingPrice && (
-        <div class="text-center p-3 rounded-xl bg-brand-500/5 border border-brand-500/15 -mt-1">
+        <div class="text-center p-3 rounded-xl bg-orange-50/25 border border-[#f07c00]/25 -mt-1">
           <div class="flex items-center justify-center gap-2">
-            <span class="text-brand-500 text-sm">🏷️</span>
-            <span class="text-brand-500 font-display font-extrabold text-lg tracking-tight">
+            <span class="text-[#f07c00] text-sm">🏷️</span>
+            <span class="text-[#f07c00] font-display font-extrabold text-lg tracking-tight">
               Dumpsters from ${startingPrice}
             </span>
           </div>
-          <span class="text-gray-500 text-[10px] font-semibold uppercase tracking-wider mt-0.5 block">Flat-rate in {city}, {state}</span>
+          <span class="text-slate-500 text-[10px] font-semibold uppercase tracking-wider mt-0.5 block">Flat-rate in {city}, {state}</span>
         </div>
       )}
 
       <div class="text-center sm:text-left">
-        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-slate-900 mb-2 leading-snug">
           Check Next-Day Dumpster Availability
         </h3>
-        <p class="text-xs text-gray-400 font-semibold leading-relaxed">Takes 45 seconds. No credit card required to view local dispatch schedule.</p>
+        <p class="text-xs text-slate-500 font-semibold leading-relaxed">Takes 45 seconds. No credit card required to view local dispatch schedule.</p>
       </div>
 
       <div class="space-y-3.5">
-        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Select Project Type</label>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Select Project Type</label>
         <div class="grid grid-cols-2 gap-3">
-          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-center cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
             <input type="radio" name="project_type" value="Residential Cleanout" class="sr-only" checked />
             <span class="text-lg mb-1">🏠</span>
-            <span class="text-xs font-semibold text-white">Residential</span>
+            <span class="text-xs font-semibold text-slate-800">Residential</span>
           </label>
-          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-center cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
             <input type="radio" name="project_type" value="Construction / Demo" class="sr-only" />
             <span class="text-lg mb-1">🔨</span>
-            <span class="text-xs font-semibold text-white">Construction</span>
+            <span class="text-xs font-semibold text-slate-800">Construction</span>
           </label>
-          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-center cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
             <input type="radio" name="project_type" value="Commercial Waste" class="sr-only" />
             <span class="text-lg mb-1">🏢</span>
-            <span class="text-xs font-semibold text-white">Commercial</span>
+            <span class="text-xs font-semibold text-slate-800">Commercial</span>
           </label>
-          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-dark-border bg-dark-surface/50 text-center cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+          <label class="project-type-card flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-center cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
             <input type="radio" name="project_type" value="Roofing Project" class="sr-only" />
             <span class="text-lg mb-1">🏠</span>
-            <span class="text-xs font-semibold text-white">Roofing</span>
+            <span class="text-xs font-semibold text-slate-800">Roofing</span>
           </label>
         </div>
       </div>
 
       <div class="space-y-2">
-        <label for="zip-code" class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Delivery Zip Code</label>
+        <label for="zip-code" class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Delivery Zip Code</label>
         <input 
           type="text" 
           id="zip-code" 
@@ -89,7 +89,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
           placeholder="e.g. 78701" 
           maxlength="5"
           required
-          class="w-full px-4 py-3.5 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-display font-semibold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all placeholder:text-gray-600 text-center tracking-wider text-lg"
+          class="w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-display font-semibold focus:outline-none focus:bg-white focus:border-[#f07c00] focus:ring-2 focus:ring-[#f07c00]/10 transition-all placeholder:text-slate-400 text-center tracking-wider text-lg"
         />
         <p id="zip-error" class="hidden text-xs text-red-500 mt-1 font-semibold">⚠️ Please enter a valid 5-digit zip code.</p>
       </div>
@@ -97,7 +97,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
       <button 
         type="button" 
         id="btn-next-1" 
-        class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_30px_rgba(245,158,11,0.35)] flex items-center justify-center gap-2 group cursor-pointer"
+        class="w-full py-4 bg-[#f07c00] hover:bg-[#d97000] text-white font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group cursor-pointer"
       >
         Select Dumpster Size
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -109,54 +109,54 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
     <!-- STEP 2: Size Preference -->
     <div id="form-step-2" class="hidden space-y-5 transition-opacity duration-300">
       <div class="text-center sm:text-left">
-        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-slate-900 mb-2 leading-snug">
           Select Your Dumpster Size
         </h3>
-        <p class="text-xs text-gray-400">Select the size that best matches your waste volume.</p>
+        <p class="text-xs text-slate-500">Select the size that best matches your waste volume.</p>
       </div>
 
       <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
           <input type="radio" name="dumpster_size" value="10-Yard" class="sr-only" checked />
-          <div class="mt-1 w-4 h-4 rounded-full border-2 border-brand-500 flex items-center justify-center">
-            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500"></div>
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-[#f07c00] flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-[#f07c00]"></div>
           </div>
           <div>
-            <span class="block font-display font-bold text-sm text-white">10-Yard Roll-Off</span>
-            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~4 pickup truck loads. Best for minor cleanouts.</span>
+            <span class="block font-display font-bold text-sm text-slate-800">10-Yard Roll-Off</span>
+            <span class="block text-[11px] text-slate-500 mt-0.5">Fits ~4 pickup truck loads. Best for minor cleanouts.</span>
           </div>
         </label>
         
-        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
           <input type="radio" name="dumpster_size" value="20-Yard" class="sr-only" />
-          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
-            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-slate-300 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-[#f07c00] hidden"></div>
           </div>
           <div>
-            <span class="block font-display font-bold text-sm text-white">20-Yard Roll-Off</span>
-            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~8 pickup truck loads. Ideal for kitchen/deck remodels.</span>
+            <span class="block font-display font-bold text-sm text-slate-800">20-Yard Roll-Off</span>
+            <span class="block text-[11px] text-slate-500 mt-0.5">Fits ~8 pickup truck loads. Ideal for kitchen/deck remodels.</span>
           </div>
         </label>
 
-        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
           <input type="radio" name="dumpster_size" value="30-Yard" class="sr-only" />
-          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
-            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-slate-300 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-[#f07c00] hidden"></div>
           </div>
           <div>
-            <span class="block font-display font-bold text-sm text-white">30-Yard Roll-Off</span>
-            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~12 pickup truck loads. Great for additions or demolition.</span>
+            <span class="block font-display font-bold text-sm text-slate-800">30-Yard Roll-Off</span>
+            <span class="block text-[11px] text-slate-500 mt-0.5">Fits ~12 pickup truck loads. Great for additions or demolition.</span>
           </div>
         </label>
 
-        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-dark-border bg-dark-surface/50 cursor-pointer hover:border-brand-500/50 hover:bg-dark-surface transition-all select-none">
+        <label class="size-card flex items-start gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:border-[#f07c00]/30 hover:bg-white transition-all select-none">
           <input type="radio" name="dumpster_size" value="40-Yard" class="sr-only" />
-          <div class="mt-1 w-4 h-4 rounded-full border-2 border-gray-600 flex items-center justify-center">
-            <div class="inner-circle w-2 h-2 rounded-full bg-brand-500 hidden"></div>
+          <div class="mt-1 w-4 h-4 rounded-full border-2 border-slate-300 flex items-center justify-center">
+            <div class="inner-circle w-2 h-2 rounded-full bg-[#f07c00] hidden"></div>
           </div>
           <div>
-            <span class="block font-display font-bold text-sm text-white">40-Yard Roll-Off</span>
-            <span class="block text-[11px] text-gray-400 mt-0.5">Fits ~16 pickup truck loads. Designed for major construction.</span>
+            <span class="block font-display font-bold text-sm text-slate-800">40-Yard Roll-Off</span>
+            <span class="block text-[11px] text-slate-500 mt-0.5">Fits ~16 pickup truck loads. Designed for major construction.</span>
           </div>
         </label>
       </div>
@@ -165,14 +165,14 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
         <button 
           type="button" 
           id="btn-back-2" 
-          class="col-span-1 py-4 bg-dark-surface border border-dark-border text-gray-300 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-dark-bg hover:text-white transition-all cursor-pointer"
+          class="col-span-1 py-4 bg-white border border-slate-200 text-slate-600 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer shadow-sm"
         >
           Back
         </button>
         <button 
           type="button" 
           id="btn-next-2" 
-          class="col-span-2 py-4 bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-2 cursor-pointer"
+          class="col-span-2 py-4 bg-[#f07c00] hover:bg-[#d97000] text-white font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
         >
           Enter Contact Info
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -185,46 +185,49 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
     <!-- STEP 3: Contact & Submit -->
     <div id="form-step-3" class="hidden space-y-5 transition-opacity duration-300">
       <div class="text-center sm:text-left">
-        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-2 leading-snug">
+        <h3 class="font-display font-extrabold text-xl sm:text-2xl text-slate-900 mb-2 leading-snug">
           Where Should We Send the Quote?
         </h3>
-        <p class="text-xs text-gray-400">Our dispatch team will connect you with a verified, low-cost local hauler.</p>
+        <p class="text-xs text-slate-500">Our dispatch team will connect you with a verified, low-cost local hauler.</p>
+        <p class="mt-2.5 text-[11px] font-semibold text-red-600 flex items-center justify-center sm:justify-start gap-1">
+          <span>🔥</span> Next-day slots filling fast in <span class="underline font-extrabold">{city}</span>.
+        </p>
       </div>
 
       <div class="space-y-4">
         <div>
-          <label for="contact-name" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Your Name</label>
+          <label for="contact-name" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Your Name</label>
           <input 
             type="text" 
             id="contact-name" 
             name="contact_name" 
             placeholder="John Doe" 
             required
-            class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-semibold focus:outline-none focus:bg-white focus:border-[#f07c00] transition-all placeholder:text-slate-400"
           />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label for="contact-phone" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Phone Number</label>
+            <label for="contact-phone" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Phone Number</label>
             <input 
               type="tel" 
               id="contact-phone" 
               name="contact_phone" 
               placeholder="(512) 555-0199" 
               required
-              class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-semibold focus:outline-none focus:bg-white focus:border-[#f07c00] transition-all placeholder:text-slate-400"
             />
           </div>
           <div>
-            <label for="contact-email" class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Email Address</label>
+            <label for="contact-email" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
             <input 
               type="email" 
               id="contact-email" 
               name="contact_email" 
               placeholder="john@example.com" 
               required
-              class="w-full px-4 py-3 rounded-xl border border-dark-border bg-dark-bg/60 text-white font-semibold focus:outline-none focus:border-brand-500 transition-all placeholder:text-gray-600"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-semibold focus:outline-none focus:bg-white focus:border-[#f07c00] transition-all placeholder:text-slate-400"
             />
           </div>
         </div>
@@ -234,14 +237,14 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
         <button 
           type="button" 
           id="btn-back-3" 
-          class="col-span-1 py-4 bg-dark-surface border border-dark-border text-gray-300 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-dark-bg hover:text-white transition-all cursor-pointer"
+          class="col-span-1 py-4 bg-white border border-slate-200 text-slate-600 font-display font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer shadow-sm"
         >
           Back
         </button>
         <button 
           type="submit" 
           id="btn-submit" 
-          class="col-span-2 py-4 bg-gradient-to-r from-brand-500 to-amber-600 hover:from-brand-600 hover:to-amber-700 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_4px_25px_rgba(245,158,11,0.3)] hover:shadow-[0_6px_30px_rgba(245,158,11,0.4)] flex items-center justify-center gap-2 cursor-pointer"
+          class="col-span-2 py-4 bg-gradient-to-r from-[#f07c00] to-orange-500 hover:from-[#d97000] hover:to-[#f07c00] text-white font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
         >
           Get Free Quote
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -250,38 +253,38 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
         </button>
       </div>
       
-      <p class="text-[10px] text-gray-500 text-center">
+      <p class="text-[10px] text-slate-400 text-center">
         By clicking "Get Free Quote", you consent to receiving dispatch calls/texts regarding waste service quotes. No marketing spam.
       </p>
 
       <!-- Trust Signals Micro-Badges -->
-      <div class="pt-4 flex items-center justify-between gap-2 text-[10px] text-gray-500 border-t border-gray-800/80 mt-4 select-none">
+      <div class="pt-4 flex items-center justify-between gap-2 text-[10px] text-slate-400 border-t border-slate-100 mt-4 select-none">
         <div class="flex items-center gap-1">
-          <span class="text-brand-500 font-bold">🔒</span> 256-Bit Secure Data
+          <span class="text-[#f07c00] font-bold">🔒</span> 256-Bit Secure Data
         </div>
         <div class="flex items-center gap-1">
-          <span class="text-brand-500 font-bold">⏱️</span> No Phone Spam Guarantee
+          <span class="text-[#f07c00] font-bold">⏱️</span> No Phone Spam Guarantee
         </div>
         <div class="flex items-center gap-1">
-          <span class="text-brand-500 font-bold">👷</span> Verified Local Haulers
+          <span class="text-[#f07c00] font-bold">👷</span> Verified Local Haulers
         </div>
       </div>
     </div>
 
     <!-- SUCCESS MESSAGE -->
     <div id="form-success" class="hidden text-center py-8 space-y-5 transition-all">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-500/10 text-brand-500 border border-brand-500/30 text-3xl animate-bounce">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-50/10 text-[#f07c00] border border-[#f07c00]/20 text-3xl animate-bounce">
         ✓
       </div>
       <div>
-        <h3 class="font-display font-extrabold text-2xl text-white mb-2 leading-snug">
+        <h3 class="font-display font-extrabold text-2xl text-slate-900 mb-2 leading-snug">
           Quote Dispatch Initiated!
         </h3>
-        <p class="text-sm text-brand-100 max-w-sm mx-auto leading-relaxed">
+        <p class="text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
           We have matched your project with the lowest-rate local hauler in <span class="font-bold underline">{city}</span>.
         </p>
       </div>
-      <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border text-xs text-gray-400 max-w-sm mx-auto leading-relaxed">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-500 max-w-sm mx-auto leading-relaxed shadow-sm">
         📞 **Expect a call in 10-15 minutes** from a local dispatcher to verify delivery instructions, drop-off placement, and coordinate your permit details.
       </div>
     </div>
@@ -290,14 +293,14 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
 
 <style>
   .project-type-card:has(input:checked) {
-    border-color: var(--color-brand-500);
-    background: rgba(245, 158, 11, 0.08);
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.05);
+    border-color: #f07c00;
+    background: rgba(240, 124, 0, 0.05);
+    box-shadow: 0 0 15px rgba(240, 124, 0, 0.03);
   }
   
   .size-card:has(input:checked) {
-    border-color: var(--color-brand-500);
-    background: rgba(245, 158, 11, 0.08);
+    border-color: #f07c00;
+    background: rgba(240, 124, 0, 0.05);
   }
 </style>
 
@@ -334,12 +337,12 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
       const radio = card.querySelector('input[type="radio"]') as HTMLInputElement;
       card.addEventListener('click', () => {
         projectCards.forEach(c => {
-          c.classList.remove('border-brand-500', 'bg-brand-500/10');
-          c.classList.add('border-dark-border', 'bg-dark-surface/50');
+          c.classList.remove('border-[#f07c00]', 'bg-orange-50/20');
+          c.classList.add('border-slate-200', 'bg-slate-50/50');
         });
         radio.checked = true;
-        card.classList.remove('border-dark-border', 'bg-dark-surface/50');
-        card.classList.add('border-brand-500', 'bg-brand-500/10');
+        card.classList.remove('border-slate-200', 'bg-slate-50/50');
+        card.classList.add('border-[#f07c00]', 'bg-orange-50/20');
       });
     });
 
@@ -348,25 +351,25 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
       const radio = card.querySelector('input[type="radio"]') as HTMLInputElement;
       card.addEventListener('click', () => {
         sizeCards.forEach(c => {
-          c.classList.remove('border-brand-500', 'bg-brand-500/10');
-          c.classList.add('border-dark-border', 'bg-dark-surface/50');
+          c.classList.remove('border-[#f07c00]', 'bg-orange-50/20');
+          c.classList.add('border-slate-200', 'bg-slate-50/50');
           const circle = c.querySelector('.inner-circle');
           const border = c.querySelector('.rounded-full');
           if (circle) circle.classList.add('hidden');
           if (border) {
-            border.classList.remove('border-brand-500');
-            border.classList.add('border-gray-600');
+            border.classList.remove('border-[#f07c00]');
+            border.classList.add('border-slate-300');
           }
         });
         radio.checked = true;
-        card.classList.remove('border-dark-border', 'bg-dark-surface/50');
-        card.classList.add('border-brand-500', 'bg-brand-500/10');
+        card.classList.remove('border-slate-200', 'bg-slate-50/50');
+        card.classList.add('border-[#f07c00]', 'bg-orange-50/20');
         const circle = card.querySelector('.inner-circle');
         const border = card.querySelector('.rounded-full');
         if (circle) circle.classList.remove('hidden');
         if (border) {
-          border.classList.remove('border-gray-600');
-          border.classList.add('border-brand-500');
+          border.classList.remove('border-slate-300');
+          border.classList.add('border-[#f07c00]');
         }
       });
     });
@@ -383,7 +386,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
 
       step1?.classList.add('hidden');
       step2?.classList.remove('hidden');
-      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3";
+      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3 (66% Completed) — Almost Matched!";
       if (progressBar) progressBar.style.width = "66%";
     });
 
@@ -397,7 +400,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
     btnNext2?.addEventListener('click', () => {
       step2?.classList.add('hidden');
       step3?.classList.remove('hidden');
-      if (stepIndicator) stepIndicator.textContent = "Step 3 of 3";
+      if (stepIndicator) stepIndicator.textContent = "Step 3 of 3 (99% Completed) — Final Step!";
       if (progressBar) progressBar.style.width = "100%";
     });
 
@@ -405,7 +408,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
     btnBack2?.addEventListener('click', () => {
       step2?.classList.add('hidden');
       step1?.classList.remove('hidden');
-      if (stepIndicator) stepIndicator.textContent = "Step 1 of 3";
+      if (stepIndicator) stepIndicator.textContent = "Step 1 of 3 (33% Completed)";
       if (progressBar) progressBar.style.width = "33%";
     });
 
@@ -413,7 +416,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
     btnBack3?.addEventListener('click', () => {
       step3?.classList.add('hidden');
       step2?.classList.remove('hidden');
-      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3";
+      if (stepIndicator) stepIndicator.textContent = "Step 2 of 3 (66% Completed) — Almost Matched!";
       if (progressBar) progressBar.style.width = "66%";
     });
 
@@ -426,7 +429,7 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = `
           Processing...
-          <svg class="animate-spin h-4 w-4 text-dark-bg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -458,9 +461,9 @@ const { city = "Your Local Area", state = "", startingPrice } = Astro.props;
         success?.classList.remove('hidden');
         
         // Update sitemaps or headers
-        if (stepIndicator) stepIndicator.textContent = "Completed";
+        if (stepIndicator) stepIndicator.textContent = "100% Completed — Dispatch Match Found!";
         if (progressBar) {
-          progressBar.classList.remove('from-brand-500', 'to-amber-500');
+          progressBar.classList.remove('from-[#f07c00]', 'to-orange-500');
           progressBar.classList.add('bg-green-500');
           progressBar.style.width = "100%";
         }

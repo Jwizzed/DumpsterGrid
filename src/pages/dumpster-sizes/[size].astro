@@ -72,7 +72,7 @@ const schema = {
   "@type": "Product",
   "name": `${sizeName} Roll-Off Dumpster`,
   "description": `Learn physical specifications, dimensions, and capacities for the standard ${sizeName} roll-off waste container. Physical size: ${dimensions}. Weight limit: ${tons} tons included.`,
-  "image": "https://dumpsterflow.com/favicon.svg",
+  "image": "https://dumpstergrid.com/favicon.svg",
   "offers": {
     "@type": "Offer",
     "price": basePrice,
@@ -83,23 +83,23 @@ const schemaString = JSON.stringify(schema);
 ---
 
 <Layout 
-  title={`${sizeName} Roll-Off Dumpster Specifications & Dimensions | DumpsterFlow`} 
+  title={`${sizeName} Roll-Off Dumpster Specifications & Dimensions | DumpsterGrid`} 
   description={`Learn everything about renting a ${sizeName} roll-off dumpster. Compare full dimensions: ${dimensions}, weight capacity: ${tons} tons, and check local prices.`}
   schema={schemaString}
 >
   <!-- Sizing Banner Header -->
-  <section class="relative py-20 px-6 overflow-hidden">
+  <section class="relative py-20 px-6 overflow-hidden bg-gradient-to-b from-slate-50/50 via-white to-white border-b border-slate-100">
     <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -right-10 animate-pulse-slow"></div>
     <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
     
     <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
-      <div class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+      <div class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-600 font-display font-bold text-xs uppercase tracking-wider">
         📏 Bin Size Specifications
       </div>
-      <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-white leading-tight">
+      <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-slate-900 leading-tight">
         The {sizeName} Roll-Off Dumpster
       </h1>
-      <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+      <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
         Compare full physical dimensions, weight thresholds, and volume capacities to ensure you rent the right container.
       </p>
     </div>
@@ -114,39 +114,39 @@ const schemaString = JSON.stringify(schema);
         
         <!-- Physical Specs Card -->
         <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
-          <h3 class="font-display font-extrabold text-2xl text-white border-b border-gray-800 pb-4">
+          <h3 class="font-display font-extrabold text-2xl text-slate-900 border-b border-slate-100 pb-4">
             Physical Dimensions & Capacity
           </h3>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
-              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">📐 Physical Footprint</span>
-              <span class="font-display font-extrabold text-white text-base">{dimensions}</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">📐 Physical Footprint</span>
+              <span class="font-display font-extrabold text-slate-800 text-base">{dimensions}</span>
             </div>
-            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
-              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">🚛 Volume Capacity</span>
-              <span class="font-display font-extrabold text-white text-base">{capacity}</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">🚛 Volume Capacity</span>
+              <span class="font-display font-extrabold text-slate-800 text-base">{capacity}</span>
             </div>
-            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
-              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">⚖️ Included Tonnage</span>
-              <span class="font-display font-extrabold text-white text-base">{tons} Tons Included</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">⚖️ Included Tonnage</span>
+              <span class="font-display font-extrabold text-slate-800 text-base">{tons} Tons Included</span>
             </div>
-            <div class="p-4 rounded-xl bg-dark-bg/60 border border-dark-border">
-              <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">⚠️ National Avg Overage</span>
-              <span class="font-display font-extrabold text-brand-500 text-base">${overage}/Ton exceeding limit</span>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">⚠️ National Avg Overage</span>
+              <span class="font-display font-extrabold text-brand-600 text-base">${overage}/Ton exceeding limit</span>
             </div>
           </div>
         </div>
 
         <!-- Best For / Ideal Cases -->
         <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-4">
-          <h3 class="font-display font-extrabold text-xl text-white">
+          <h3 class="font-display font-extrabold text-xl text-slate-900">
             What projects is a {sizeName} dumpster best for?
           </h3>
-          <p class="text-sm text-gray-400 leading-relaxed">
+          <p class="text-sm text-slate-600 leading-relaxed">
             This size plan is highly tailored and optimized for:
           </p>
-          <div class="p-4 rounded-xl bg-brand-500/5 border border-brand-500/10 text-sm text-gray-300 leading-relaxed">
+          <div class="p-4 rounded-xl bg-brand-50/50 border border-brand-500/20 text-sm text-slate-700 leading-relaxed shadow-sm">
             💡 **Best Use Cases:** {ideal}
           </div>
         </div>
@@ -162,23 +162,23 @@ const schemaString = JSON.stringify(schema);
   </section>
 
   <!-- Popular Booking Directory -->
-  <section class="py-20 px-6 bg-dark-surface/40 border-t border-dark-border">
+  <section class="py-20 px-6 bg-slate-50 border-t border-slate-200">
     <div class="max-w-5xl mx-auto space-y-12">
       <div class="text-center space-y-3">
-        <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white">
+        <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900">
           Book a {sizeName} Container in Top Cities
         </h2>
-        <p class="text-gray-400 text-sm">Find localized rates for this size in our highest-volume markets.</p>
+        <p class="text-slate-600 text-sm">Find localized rates for this size in our highest-volume markets.</p>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {popularCities.map(city => (
           <a 
             href={`/locations/${city.slug}`}
-            class="px-4 py-3.5 rounded-xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center flex items-center justify-between"
+            class="px-4 py-3.5 rounded-xl bg-white border border-slate-200 hover:border-brand-500/50 hover:bg-brand-50/10 text-xs font-semibold text-slate-600 hover:text-brand-600 transition-all text-center flex items-center justify-between shadow-sm"
           >
             <span>{city.city}, {city.state}</span>
-            <span class="text-brand-500 font-bold">→</span>
+            <span class="text-brand-600 font-bold">→</span>
           </a>
         ))}
       </div>

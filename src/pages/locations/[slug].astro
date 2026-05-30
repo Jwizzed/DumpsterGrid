@@ -78,7 +78,7 @@ const schema = {
       "@type": "Product",
       "name": `Roll-Off Dumpster Rental in ${cityName}, ${stateCode}`,
       "description": `Affordable flat-rate roll-off dumpster rentals in ${cityName}, ${stateCode}. Compare dimensions, capacities, and costs for 10-Yard, 20-Yard, 30-Yard, and 40-Yard dumpsters.`,
-      "image": "https://dumpsterflow.com/favicon.svg",
+      "image": "https://dumpstergrid.com/favicon.svg",
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "USD",
@@ -89,10 +89,10 @@ const schema = {
     },
     {
       "@type": "LocalBusiness",
-      "name": `DumpsterFlow - Dumpster Rental in ${cityName}`,
+      "name": `DumpsterGrid - Dumpster Rental in ${cityName}`,
       "description": `Connecting construction managers and residential property owners with low-cost local dumpster rental haulers near ${cityName}, ${stateCode}.`,
       "telephone": loc.phone,
-      "image": "https://dumpsterflow.com/favicon.svg",
+      "image": "https://dumpstergrid.com/favicon.svg",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": cityName,
@@ -145,7 +145,7 @@ const schemaString = JSON.stringify(schema);
   schema={schemaString}
 >
   <!-- Recently Booked Activity Ticker -->
-  <div class="bg-dark-surface/80 border-b border-dark-border overflow-hidden" id="activity-ticker-wrapper">
+  <div class="bg-slate-100 border-b border-slate-200 overflow-hidden" id="activity-ticker-wrapper">
     <div class="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-center gap-3">
       <span class="relative flex h-2.5 w-2.5 shrink-0">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -154,191 +154,190 @@ const schemaString = JSON.stringify(schema);
       <div class="overflow-hidden h-5 relative" id="activity-ticker">
         {activityItems.map((item, i) => (
           <p 
-            class={`activity-ticker-item text-xs text-gray-400 font-semibold whitespace-nowrap absolute inset-0 transition-all duration-500 ${i === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            class={`activity-ticker-item text-xs text-slate-500 font-semibold whitespace-nowrap absolute inset-0 transition-all duration-500 ${i === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             data-index={i}
           >
-            <span class="text-white">{item.size}</span> dumpster booked in <span class="text-brand-500">{item.city}, {item.state}</span> — {item.minutesAgo} min ago
+            <span class="text-slate-800">{item.size}</span> dumpster booked in <span class="text-brand-600">{item.city}, {item.state}</span> — {item.minutesAgo} min ago
           </p>
         ))}
       </div>
     </div>
-  </div>
-
-  <!-- Hero Section -->
-  <section class="relative py-16 px-6 overflow-hidden">
-    <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -left-10 animate-pulse-slow"></div>
-    <div class="ambient-glow-blue w-[400px] h-[400px] -bottom-10 -right-10 animate-pulse-slow"></div>
+  </div>  <!-- Hero Section (Visual Background Mode Modeled After BD) -->
+  <section class="relative min-h-[calc(100vh-73px)] flex items-center py-12 px-6 md:px-12 overflow-hidden bg-cover bg-center" style="background-image: url('/images/dumpster_hero.png');">
     
-    <div class="max-w-7xl mx-auto relative z-10 w-full flex flex-col gap-8">
+    <!-- Dark Gradient Overlay for Maximum Text Contrast -->
+    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/75 to-transparent pointer-events-none z-0"></div>
+    
+    <div class="max-w-7xl mx-auto relative z-10 w-full text-left">
       
-      <!-- Mobile Hero Header Block (Visible only on mobile/tablet) -->
-      <div class="block lg:hidden text-center space-y-4">
+      <!-- Hero Copy Left Container -->
+      <div class="max-w-2xl space-y-7 text-left text-white">
+        
         <!-- Breadcrumbs -->
-        <nav class="flex items-center justify-center gap-2 text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider select-none">
-          <a href="/" class="hover:text-brand-500 transition-colors">Home</a>
+        <nav class="flex items-center justify-start gap-2 text-xs font-semibold text-slate-300 uppercase tracking-wider select-none mb-2">
+          <a href="/" class="hover:text-brand-200 transition-colors">Home</a>
           <span>/</span>
-          <a href="/locations" class="hover:text-brand-500 transition-colors">Locations</a>
+          <a href="/locations" class="hover:text-brand-200 transition-colors">Locations</a>
           <span>/</span>
-          <a href={`/locations/${stateCode.toLowerCase()}`} class="hover:text-brand-500 transition-colors">{stateFull}</a>
+          <a href={`/locations/${stateCode.toLowerCase()}`} class="hover:text-brand-200 transition-colors">{stateFull}</a>
           <span>/</span>
-          <span class="text-gray-300">{cityName}</span>
+          <span class="text-white">{cityName}</span>
         </nav>
 
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/20 border border-brand-500/40 text-brand-200 font-display font-bold text-xs uppercase tracking-wider">
           📍 Verified Service in {cityName}, {stateCode}
         </div>
         
-        <h1 class="font-display font-extrabold text-4.5xl tracking-tight text-white leading-tight">
-          Roll-Off Dumpster Rental in <span class="bg-gradient-to-r from-brand-500 to-amber-500 bg-clip-text text-transparent text-glow-amber">{cityName}, {stateCode}</span>
+        <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-[1.1] drop-shadow-md text-left">
+          Roll-Off Dumpster Rental in <span class="bg-gradient-to-r from-brand-400 to-brand-500 bg-clip-text text-transparent text-glow-amber">{cityName}, {stateCode}</span>
         </h1>
+        
+        <p class="text-slate-200 text-base sm:text-lg max-w-xl leading-relaxed drop-shadow-xs">
+          {spun.heroIntro}
+        </p>
 
-        <!-- Mobile Phone Call Direct CTA -->
-        <div class="pt-2">
-          <span class="block text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-2">Need it today? Talk to a Dispatcher Near You:</span>
-          <a href={`tel:${loc.phone}`} class="w-full px-6 py-4 bg-brand-500 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all hover:bg-brand-600 active:scale-95 shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <!-- Trust bullet tags in white -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg pt-2 text-left text-xs text-slate-300">
+          <div class="flex items-center gap-2">
+            <span class="text-brand-400 font-bold">✓</span> Local {cityName} dispatch routing
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-brand-400 font-bold">✓</span> Direct hauling to {loc.landfill_name}
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-brand-400 font-bold">✓</span> 100% Flat-rate quote guarantees
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-brand-400 font-bold">✓</span> Next-day dumpster drops available
+          </div>
+        </div>
+
+        <!-- Orange Interactive Trigger Button -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-start gap-4">
+          <button 
+            type="button"
+            onclick="const el = document.getElementById('zip-code') || document.getElementById('quote-section'); if(el) { el.scrollIntoView({behavior: 'smooth'}); setTimeout(() => el.focus(), 600); }"
+            class="w-full sm:w-auto px-9 py-4 bg-[#f07c00] hover:bg-[#d97000] text-white font-display font-extrabold text-base uppercase tracking-wider rounded-xl transition-all shadow-lg active:scale-95 cursor-pointer shadow-orange-500/25"
+          >
+            Check Your Price
+          </button>
+          
+          <a href={`tel:${loc.phone}`} class="w-full sm:w-auto px-6 py-4 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 text-white font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all active:scale-95 flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             Call {loc.phone}
           </a>
         </div>
+
+      </div>
+ 
+    </div>
+  </section>
+
+  <!-- Interactive Lead Quote Section -->
+  <section id="quote-section" class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 bg-white relative z-10 border-b border-slate-200 scroll-mt-[73px]">
+    <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Text Copy Left Side -->
+      <div class="lg:col-span-7 space-y-6 text-left">
+        <div class="inline-block px-3 py-1 rounded bg-[#f07c00]/10 border border-[#f07c00]/25 text-[#f07c00] font-display font-bold text-xs uppercase tracking-wider">
+          ⏱️ Get a Local Quote
+        </div>
+        
+        <h2 class="font-display font-extrabold text-4xl sm:text-5xl text-slate-900 leading-tight max-w-xl">
+          Check Next-Day Availability in {cityName}
+        </h2>
+        
+        <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl">
+          Enter your ZIP code to check local dispatch inventory, pricing, and permitted street placement guidelines in <strong class="font-bold">{cityName}, {stateCode}</strong>.
+        </p>
+
+        <!-- Dynamic Trust Checklist to balance height -->
+        <div class="space-y-4 pt-4 max-w-lg text-left">
+          <div class="flex items-start gap-4">
+            <div class="bg-orange-50 text-[#f07c00] p-2 rounded-lg mt-0.5 text-xs font-bold shadow-sm">✓</div>
+            <div>
+              <h4 class="font-display font-bold text-slate-900 text-sm sm:text-base">Verified {cityName} Dispatch</h4>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Secure direct dispatch scheduling synchronized with localized regional hauling networks.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-orange-50 text-[#f07c00] p-2 rounded-lg mt-0.5 text-xs font-bold shadow-sm">✓</div>
+            <div>
+              <h4 class="font-display font-bold text-slate-900 text-sm sm:text-base">Environmentally Compliant</h4>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">All waste loads safely transferred and processed at EPA-compliant regional landfills like {loc.landfill_name}.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-orange-50 text-[#f07c00] p-2 rounded-lg mt-0.5 text-xs font-bold shadow-sm">✓</div>
+            <div>
+              <h4 class="font-display font-bold text-slate-900 text-sm sm:text-base">Local Permit Guidance</h4>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Receive clear municipal code advice if your container requires Right-of-Way street parking approvals.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Main Layout Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
-        
-        <!-- Left Content Column (Visible only on Desktop for clean layout grid representation) -->
-        <div class="lg:col-span-7 space-y-6 hidden lg:block">
-          <!-- Breadcrumbs -->
-          <nav class="flex items-center justify-start gap-2 text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider select-none">
-            <a href="/" class="hover:text-brand-500 transition-colors">Home</a>
-            <span>/</span>
-            <a href="/locations" class="hover:text-brand-500 transition-colors">Locations</a>
-            <span>/</span>
-            <a href={`/locations/${stateCode.toLowerCase()}`} class="hover:text-brand-500 transition-colors">{stateFull}</a>
-            <span>/</span>
-            <span class="text-gray-300">{cityName}</span>
-          </nav>
-
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
-            📍 Verified Service in {cityName}, {stateCode}
-          </div>
-          
-          <h1 class="font-display font-extrabold lg:text-6xl tracking-tight text-white leading-[1.15]">
-            Roll-Off Dumpster Rental in <span class="bg-gradient-to-r from-brand-500 to-amber-500 bg-clip-text text-transparent text-glow-amber">{cityName}, {stateCode}</span>
-          </h1>
-          
-          <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            {spun.heroIntro}
-          </p>
-
-          <!-- Trust bullet tags -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto lg:mx-0 pt-2 text-left">
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Local {cityName} dispatch routing
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Direct hauling to {loc.landfill_name}
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> 100% Flat-rate quote guarantees
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Next-day dumpster drops available
-            </div>
-          </div>
-
-          <!-- Phone Dispatch Direct CTA -->
-          <div class="pt-4 flex flex-col sm:flex-row items-center justify-start gap-4">
-            <a href={`tel:${loc.phone}`} class="w-full sm:w-auto px-6 py-4 bg-brand-500 text-dark-bg font-display font-extrabold text-sm uppercase tracking-wider rounded-xl transition-all hover:bg-brand-600 active:scale-95 shadow-[0_4px_25px_rgba(245,158,11,0.25)] flex items-center justify-center gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              Call {loc.phone}
-            </a>
-            <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">or fill out the quote wizard →</span>
-          </div>
-        </div>
-
-        <!-- Form Column (Locks into 45% screen share on desktop, stacks second on mobile) -->
-        <div class="lg:col-span-5 w-full">
+      <!-- Lead Capture Form Right Side -->
+      <div class="lg:col-span-5 w-full flex justify-center lg:justify-end">
+        <div class="w-full max-w-md">
           <LeadForm city={cityName} state={stateCode} startingPrice={popular20ydLow} />
         </div>
-
-        <!-- Mobile-Only Details Block (Appears below the Form Column on mobile) -->
-        <div class="block lg:hidden space-y-6 text-center pt-6">
-          <p class="text-gray-400 text-base leading-relaxed">
-            {spun.heroIntro}
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-left max-w-md mx-auto">
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Local {cityName} dispatch routing
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Direct hauling to {loc.landfill_name}
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> 100% Flat-rate quote guarantees
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-300">
-              <span class="text-brand-500 font-bold">✓</span> Next-day dumpster drops available
-            </div>
-          </div>
-        </div>
-
       </div>
 
     </div>
   </section>
 
   <!-- Pricing Cards Matrix -->
-  <section class="py-24 px-6 bg-dark-surface/40 border-y border-dark-border">
+  <section class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 bg-slate-50 border-y border-slate-200">
     <div class="max-w-7xl mx-auto space-y-16">
       
       <div class="text-center space-y-4 max-w-2xl mx-auto">
-        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white leading-tight">
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 leading-tight">
           Flat-Rate Dumpster Costs in {cityName}
         </h2>
-        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
           {spun.pricingIntro}
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {pricingPlans.map(item => (
-          <div class="glass-card-interactive rounded-2xl p-6 flex flex-col justify-between border-dark-border hover:border-brand-500/30">
+          <div class="glass-card-interactive rounded-2xl p-6 flex flex-col justify-between border-slate-200 hover:border-brand-500/30">
             <div class="space-y-4">
               
               <!-- Card Header -->
               <div class="flex items-center justify-between">
-                <span class="font-display font-extrabold text-xl text-white">{item.size}</span>
-                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 border border-brand-500/20">
+                <span class="font-display font-extrabold text-xl text-slate-900">{item.size}</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/10 text-brand-600 border border-brand-500/25">
                   {item.tons} Tons
                 </span>
               </div>
               
               <!-- Local Price Range -->
               <div class="py-2">
-                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider mb-0.5">Estimated Price Range</span>
-                <span class="font-display font-black text-2xl sm:text-3xl text-white">
+                <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Estimated Price Range</span>
+                <span class="font-display font-black text-2xl sm:text-3xl text-slate-900">
                   ${item.low} - ${item.high}
                 </span>
-                <span class="text-xs text-gray-500 block mt-0.5">/ Flat Rate</span>
+                <span class="text-xs text-slate-400 block mt-0.5">/ Flat Rate</span>
               </div>
 
-              <p class="text-xs text-gray-400 leading-relaxed min-h-[50px]">
+              <p class="text-xs text-slate-500 leading-relaxed min-h-[50px]">
                 {item.desc}
               </p>
 
               <!-- Local Overage and Specs -->
-              <div class="border-t border-gray-800/80 pt-4 space-y-2 text-xs text-gray-400">
+              <div class="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-500">
                 <div class="flex items-center justify-between">
-                  <span>⚖️ **Weight Limit:**</span>
-                  <span class="font-semibold text-white">{item.tons} Tons Included</span>
+                  <span>⚖️ <strong class="font-semibold text-slate-700">Weight Limit:</strong></span>
+                  <span class="font-semibold text-slate-700">{item.tons} Tons Included</span>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span>⚠️ **Overage Fee:**</span>
-                  <span class="font-semibold text-brand-500">${item.overage}/Ton exceeding limit</span>
+                  <span>⚠️ <strong class="font-semibold text-slate-700">Overage Fee:</strong></span>
+                  <span class="font-semibold text-brand-600">${item.overage}/Ton exceeding limit</span>
                 </div>
               </div>
             </div>
@@ -346,7 +345,7 @@ const schemaString = JSON.stringify(schema);
             <button 
               type="button"
               onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('zip-code')?.focus();"
-              class="block w-full text-center mt-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_4px_12px_rgba(245,158,11,0.15)]"
+              class="block w-full text-center mt-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-display font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
             >
               Order {item.size}
             </button>
@@ -355,13 +354,13 @@ const schemaString = JSON.stringify(schema);
       </div>
 
       <!-- Visual Anchor Bridging Banner -->
-      <div class="mt-12 max-w-4xl mx-auto glass-card rounded-2xl p-6 border-brand-500/20 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
+      <div class="mt-12 max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
         <div class="absolute inset-0 bg-brand-500/5 opacity-50 pointer-events-none"></div>
         <div class="flex items-center gap-4 relative z-10 text-left">
           <span class="text-3xl select-none animate-pulse">👉</span>
           <div>
             <h4 class="font-display font-extrabold text-white text-base">Lock In This Local Rate</h4>
-            <p class="text-xs text-gray-400 mt-0.5">
+            <p class="text-xs text-slate-300 mt-0.5">
               Rates vary by specific ZIP code. Enter yours right here to lock in this price.
             </p>
           </div>
@@ -369,7 +368,7 @@ const schemaString = JSON.stringify(schema);
         <button 
           type="button"
           onclick="window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => { document.getElementById('zip-code')?.focus(); }, 400);"
-          class="w-full md:w-auto px-6 py-3.5 bg-brand-500 hover:bg-brand-600 text-dark-bg font-display font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-[0_4px_15px_rgba(245,158,11,0.2)] group-hover:scale-[1.03]"
+          class="w-full md:w-auto px-6 py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-display font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-[0_4px_15px_rgba(22,163,74,0.2)] group-hover:scale-[1.03]"
         >
           Check Local ZIP Code
         </button>
@@ -379,99 +378,99 @@ const schemaString = JSON.stringify(schema);
   </section>
 
   <!-- Social Proof & Trust Section -->
-  <section class="py-16 px-6 border-y border-dark-border bg-dark-bg/80 relative overflow-hidden">
+  <section class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 border-y border-slate-200 bg-slate-50 relative overflow-hidden">
     <div class="ambient-glow-blue w-[300px] h-[300px] -top-20 left-1/2 animate-pulse-slow"></div>
     
     <div class="max-w-6xl mx-auto relative z-10 space-y-14">
       
       <!-- Aggregate Stats Bar -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x divide-dark-border text-center">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x divide-slate-200 text-center">
         <div class="space-y-1">
-          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">47,000+</span>
-          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">🚛 Dumpsters Delivered Nationwide</span>
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900">47,000+</span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">🚛 Dumpsters Delivered Nationwide</span>
         </div>
         <div class="space-y-1">
-          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">4.8<span class="text-brand-500">/5</span></span>
-          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">⭐ Average Customer Rating</span>
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900">4.8<span class="text-brand-600">/5</span></span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">⭐ Average Customer Rating</span>
         </div>
         <div class="space-y-1">
-          <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">10,000+</span>
-          <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500">📍 U.S. Cities Served</span>
+          <span class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900">10,000+</span>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">📍 U.S. Cities Served</span>
         </div>
       </div>
 
       <!-- Testimonial Cards -->
       <div class="space-y-6">
         <div class="text-center">
-          <h3 class="font-display font-extrabold text-2xl text-white">What {cityName} Area Customers Say</h3>
+          <h3 class="font-display font-extrabold text-2xl text-slate-900">What {cityName} Area Customers Say</h3>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Testimonial 1 -->
-          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+          <div class="glass-card rounded-2xl p-6 border-slate-200 hover:border-brand-500/20 transition-colors relative">
             <div class="flex items-center gap-1 mb-3">
               {[1,2,3,4,5].map(() => (
-                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+            <p class="text-sm text-slate-600 leading-relaxed mb-4 italic">
               "{spun.testimonialText}"
             </p>
-            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
-              <div class="w-9 h-9 rounded-full bg-brand-500/15 border border-brand-500/20 flex items-center justify-center text-brand-500 font-display font-bold text-sm">
+            <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
+              <div class="w-9 h-9 rounded-full bg-brand-50/50 border border-brand-500/20 flex items-center justify-center text-brand-600 font-display font-bold text-sm">
                 {spun.testimonialName.charAt(0)}
               </div>
               <div>
-                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName}</span>
-                <span class="block text-[11px] text-gray-500">{spun.testimonialRole}</span>
+                <span class="block text-sm font-display font-bold text-slate-800">{spun.testimonialName}</span>
+                <span class="block text-[11px] text-slate-500">{spun.testimonialRole}</span>
               </div>
             </div>
           </div>
 
           <!-- Testimonial 2 -->
-          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+          <div class="glass-card rounded-2xl p-6 border-slate-200 hover:border-brand-500/20 transition-colors relative">
             <div class="flex items-center gap-1 mb-3">
               {[1,2,3,4,5].map(() => (
-                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+            <p class="text-sm text-slate-600 leading-relaxed mb-4 italic">
               "{spun.testimonialText2}"
             </p>
-            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
-              <div class="w-9 h-9 rounded-full bg-blue-500/15 border border-blue-500/20 flex items-center justify-center text-blue-400 font-display font-bold text-sm">
+            <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
+              <div class="w-9 h-9 rounded-full bg-blue-50/50 border border-blue-200 flex items-center justify-center text-blue-600 font-display font-bold text-sm">
                 {spun.testimonialName2.charAt(0)}
               </div>
               <div>
-                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName2}</span>
-                <span class="block text-[11px] text-gray-500">{spun.testimonialRole2}</span>
+                <span class="block text-sm font-display font-bold text-slate-800">{spun.testimonialName2}</span>
+                <span class="block text-[11px] text-slate-500">{spun.testimonialRole2}</span>
               </div>
             </div>
           </div>
 
           <!-- Testimonial 3 -->
-          <div class="glass-card rounded-2xl p-6 border-dark-border hover:border-brand-500/20 transition-colors relative">
+          <div class="glass-card rounded-2xl p-6 border-slate-200 hover:border-brand-500/20 transition-colors relative">
             <div class="flex items-center gap-1 mb-3">
               {[1,2,3,4,5].map(() => (
-                <svg class="w-4 h-4 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <p class="text-sm text-gray-300 leading-relaxed mb-4 italic">
+            <p class="text-sm text-slate-600 leading-relaxed mb-4 italic">
               "{spun.testimonialText3}"
             </p>
-            <div class="flex items-center gap-3 pt-3 border-t border-gray-800/80">
-              <div class="w-9 h-9 rounded-full bg-green-500/15 border border-green-500/20 flex items-center justify-center text-green-400 font-display font-bold text-sm">
+            <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
+              <div class="w-9 h-9 rounded-full bg-green-50/50 border border-green-200 flex items-center justify-center text-green-600 font-display font-bold text-sm">
                 {spun.testimonialName3.charAt(0)}
               </div>
               <div>
-                <span class="block text-sm font-display font-bold text-white">{spun.testimonialName3}</span>
-                <span class="block text-[11px] text-gray-500">{spun.testimonialRole3}</span>
+                <span class="block text-sm font-display font-bold text-slate-800">{spun.testimonialName3}</span>
+                <span class="block text-[11px] text-slate-500">{spun.testimonialRole3}</span>
               </div>
             </div>
           </div>
@@ -480,16 +479,16 @@ const schemaString = JSON.stringify(schema);
 
       <!-- Trust Badge Bar -->
       <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-4">
-        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-semibold uppercase tracking-wider">
           <span class="text-base">🏅</span> BBB Accredited Partners
         </div>
-        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-semibold uppercase tracking-wider">
           <span class="text-base">♻️</span> EPA Compliant Disposal
         </div>
-        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-semibold uppercase tracking-wider">
           <span class="text-base">🛡️</span> Licensed & Insured Haulers
         </div>
-        <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-semibold uppercase tracking-wider">
           <span class="text-base">💳</span> All Major Cards Accepted
         </div>
       </div>
@@ -498,31 +497,31 @@ const schemaString = JSON.stringify(schema);
   </section>
 
   <!-- Permit Guide & Landfill Context -->
-  <section class="py-24 px-6 max-w-5xl mx-auto space-y-16">
+  <section class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 max-w-5xl mx-auto space-y-16">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
       
       <!-- Right-Of-Way Permit Card -->
-      <div class="md:col-span-7 glass-card rounded-3xl p-8 flex flex-col justify-between border-dark-border">
+      <div class="md:col-span-7 glass-card rounded-3xl p-8 flex flex-col justify-between border-slate-200">
         <div class="space-y-4">
-          <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+          <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/25 text-brand-600 font-display font-bold text-xs uppercase tracking-wider">
             📋 Permit Compliance Guide
           </div>
           
-          <h3 class="font-display font-extrabold text-2xl text-white">
+          <h3 class="font-display font-extrabold text-2xl text-slate-900">
             Do I need a dumpster permit in {cityName}?
           </h3>
 
-          <p class="text-sm text-gray-400 leading-relaxed">
+          <p class="text-sm text-slate-600 leading-relaxed">
             If you place your roll-off container entirely on your private property (e.g. your driveway, yard, or loading dock), **no permit is required**. 
           </p>
 
           <!-- Permit alert status -->
           {loc.permit_required === 1 ? (
-            <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs leading-relaxed text-gray-300">
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs leading-relaxed text-slate-700">
               ⚠️ **Street Placement Alert:** {spun.permitDetails}
             </div>
           ) : (
-            <div class="p-4 rounded-xl bg-green-500/5 border border-green-500/20 text-xs leading-relaxed text-gray-300">
+            <div class="p-4 rounded-xl bg-green-50 border border-green-200 text-xs leading-relaxed text-slate-700">
               ✓ **Street Placement Rules:** {spun.permitDetails}
             </div>
           )}
@@ -530,24 +529,24 @@ const schemaString = JSON.stringify(schema);
       </div>
 
       <!-- Local Landfill Card -->
-      <div class="md:col-span-5 glass-card rounded-3xl p-8 flex flex-col justify-between border-dark-border relative overflow-hidden">
+      <div class="md:col-span-5 glass-card rounded-3xl p-8 flex flex-col justify-between border-slate-200 relative overflow-hidden">
         <div class="space-y-4">
-          <div class="inline-block px-3 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 font-display font-bold text-xs uppercase tracking-wider">
+          <div class="inline-block px-3 py-1 rounded bg-blue-50/50 border border-blue-200 text-blue-600 font-display font-bold text-xs uppercase tracking-wider">
             ♻️ Landfill Direct
           </div>
           
-          <h3 class="font-display font-extrabold text-2xl text-white">
+          <h3 class="font-display font-extrabold text-2xl text-slate-900">
             Environmental Disposal
           </h3>
 
-          <p class="text-sm text-gray-400 leading-relaxed">
+          <p class="text-sm text-slate-600 leading-relaxed">
             {spun.landfillDetails}
           </p>
 
-          <div class="p-4 rounded-xl bg-dark-bg border border-dark-border text-center">
-            <span class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Local Processing Hub</span>
-            <span class="font-display font-extrabold text-sm text-white">{loc.landfill_name}</span>
-            <span class="block text-[10px] text-gray-400 mt-1">Servicing the Greater {cityName} Area</span>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 text-center">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Local Processing Hub</span>
+            <span class="font-display font-extrabold text-sm text-slate-800">{loc.landfill_name}</span>
+            <span class="block text-[10px] text-slate-500 mt-1">Servicing the Greater {cityName} Area</span>
           </div>
         </div>
       </div>
@@ -556,7 +555,7 @@ const schemaString = JSON.stringify(schema);
   </section>
 
   <!-- Local Infrastructure & Rules Dashboard (Anti-Thin Content Defenses) -->
-  <section class="py-20 px-6 bg-dark-bg/60 border-t border-dark-border relative overflow-hidden">
+  <section class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 bg-slate-50 border-t border-slate-200 relative overflow-hidden">
     <!-- Ambient Glows -->
     <div class="ambient-glow-amber w-[300px] h-[300px] top-1/2 -right-10 animate-pulse-slow"></div>
 
@@ -564,13 +563,13 @@ const schemaString = JSON.stringify(schema);
       
       <!-- Section Header -->
       <div class="text-center space-y-4 max-w-2xl mx-auto">
-        <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/20 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
+        <div class="inline-block px-3 py-1 rounded bg-brand-500/10 border border-brand-500/25 text-brand-600 font-display font-bold text-xs uppercase tracking-wider">
           📊 Regional Specs & Material Rules
         </div>
-        <h2 class="font-display font-extrabold text-3xl text-white leading-tight">
+        <h2 class="font-display font-extrabold text-3xl text-slate-900 leading-tight">
           Local Infrastructure & Compliance Directory
         </h2>
-        <p class="text-gray-400 text-sm">
+        <p class="text-slate-600 text-sm">
           Specific municipal operating parameters, regional dispatch stats, and ecological garbage handling parameters for the {cityName} area.
         </p>
       </div>
@@ -579,68 +578,68 @@ const schemaString = JSON.stringify(schema);
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
         
         <!-- Column 1: Local Stats Matrix -->
-        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-dark-border flex flex-col justify-between">
+        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-slate-200 flex flex-col justify-between">
           <div class="space-y-6">
-            <h3 class="font-display font-extrabold text-xl text-white flex items-center gap-3">
+            <h3 class="font-display font-extrabold text-xl text-slate-900 flex items-center gap-3">
               <span>📋</span> Regional Profile & Stats
             </h3>
             
             <div class="space-y-4">
               <!-- Population served -->
-              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
-                <span class="text-gray-400">👥 Estimated Population Served:</span>
-                <span class="font-semibold text-white font-display">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3 text-sm">
+                <span class="text-slate-500">👥 Estimated Population Served:</span>
+                <span class="font-semibold text-slate-800 font-display">
                   {loc.population.toLocaleString()} Residents
                 </span>
               </div>
               
               <!-- State Permitting Rules -->
-              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
-                <span class="text-gray-400">🏛️ State Jurisdiction:</span>
-                <span class="font-semibold text-white">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3 text-sm">
+                <span class="text-slate-500">🏛️ State Jurisdiction:</span>
+                <span class="font-semibold text-slate-800">
                   {stateFull} ({stateCode})
                 </span>
               </div>
 
               <!-- Dispatch Code -->
-              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
-                <span class="text-gray-400">📞 Local Dispatch Code:</span>
-                <span class="font-semibold text-brand-500 font-display">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3 text-sm">
+                <span class="text-slate-500">📞 Local Dispatch Code:</span>
+                <span class="font-semibold text-brand-600 font-display">
                   {loc.phone.slice(0, 3)} Area Code Routing
                 </span>
               </div>
 
               <!-- Target Disposal Hub -->
-              <div class="flex items-center justify-between border-b border-gray-800 pb-3 text-sm">
-                <span class="text-gray-400">♻️ Target Disposal Hub:</span>
-                <span class="font-semibold text-white truncate max-w-[200px]" title={loc.landfill_name}>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3 text-sm">
+                <span class="text-slate-500">♻️ Target Disposal Hub:</span>
+                <span class="font-semibold text-slate-800 truncate max-w-[200px]" title={loc.landfill_name}>
                   {loc.landfill_name}
                 </span>
               </div>
 
               <!-- Permit Cost -->
               <div class="flex items-center justify-between text-sm">
-                <span class="text-gray-400">💰 Municipal Permit Fee:</span>
-                <span class="font-semibold text-white">
+                <span class="text-slate-500">💰 Municipal Permit Fee:</span>
+                <span class="font-semibold text-slate-800">
                   {loc.permit_required === 1 ? `$${loc.permit_cost.toFixed(2)} (Avg)` : 'No standard fee'}
                 </span>
               </div>
             </div>
           </div>
           
-          <div class="mt-6 pt-4 border-t border-gray-800/80 text-[10px] text-gray-500 leading-relaxed">
+          <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
             * Regional parameters are dynamically compiled based on regional census statistics, local municipal right-of-way ordinances, and hauler delivery logs.
           </div>
         </div>
 
         <!-- Column 2: Material Permissibility Matrix -->
-        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-dark-border flex flex-col justify-between">
+        <div class="md:col-span-6 glass-card rounded-3xl p-8 border-slate-200 flex flex-col justify-between">
           <div class="space-y-6">
-            <h3 class="font-display font-extrabold text-xl text-white flex items-center gap-3">
+            <h3 class="font-display font-extrabold text-xl text-slate-900 flex items-center gap-3">
               <span>🚫</span> Material Compliance Matrix
             </h3>
             
-            <p class="text-xs text-gray-400 leading-relaxed">
+            <p class="text-xs text-slate-500 leading-relaxed">
               Standard local ecological laws dictate what types of solid waste are allowed in roll-off containers. Banned items must be disposed of at specialized facilities.
             </p>
 
@@ -648,34 +647,34 @@ const schemaString = JSON.stringify(schema);
               
               <!-- Column: Allowed -->
               <div class="space-y-2.5">
-                <span class="text-xs font-bold text-green-400 block uppercase tracking-wider mb-1">✓ Standard Allowed</span>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <span class="text-xs font-bold text-green-600 block uppercase tracking-wider mb-1">✓ Standard Allowed</span>
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-green-500">✔</span> Household Junk
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-green-500">✔</span> Wood & Drywall
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-green-500">✔</span> Concrete & Dirt
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-green-500">✔</span> Metal & Shingles
                 </div>
               </div>
 
               <!-- Column: Prohibited -->
               <div class="space-y-2.5">
-                <span class="text-xs font-bold text-red-400 block uppercase tracking-wider mb-1">✗ Banned / Prohibited</span>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <span class="text-xs font-bold text-red-600 block uppercase tracking-wider mb-1">✗ Banned / Prohibited</span>
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-red-500">✘</span> Wet Paints
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-red-500">✘</span> Car Batteries
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-red-500">✘</span> Hazardous Oils
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-300">
+                <div class="flex items-center gap-2 text-xs text-slate-600">
                   <span class="text-red-500">✘</span> Propane Tanks
                 </div>
               </div>
@@ -683,7 +682,7 @@ const schemaString = JSON.stringify(schema);
             </div>
           </div>
 
-          <div class="mt-6 pt-4 border-t border-gray-800/80 text-[10px] text-gray-500 leading-relaxed">
+          <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed">
             ⚠️ Loading hazardous or prohibited waste may trigger EPA compliance flags and local sorting penalty surcharges. Please contact dispatch to handle exceptional items.
           </div>
         </div>
@@ -695,44 +694,44 @@ const schemaString = JSON.stringify(schema);
 
 
   <!-- Local FAQ Accordions -->
-  <section class="py-24 px-6 bg-dark-surface/20 border-t border-dark-border">
+  <section class="min-h-[calc(100vh-73px)] flex flex-col justify-center py-12 px-6 bg-white border-t border-slate-200">
     <div class="max-w-3xl mx-auto space-y-12">
       
       <div class="text-center space-y-4">
-        <h2 class="font-display font-extrabold text-3xl text-white">
+        <h2 class="font-display font-extrabold text-3xl text-slate-900">
           Frequently Asked Questions in {cityName}
         </h2>
-        <p class="text-gray-400 text-sm">Everything you need to know about renting a dumpster locally.</p>
+        <p class="text-slate-600 text-sm">Everything you need to know about renting a dumpster locally.</p>
       </div>
 
       <div class="space-y-4">
         
         <!-- Q1 -->
         <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h4 class="font-display font-bold text-white text-base">
+          <h4 class="font-display font-bold text-slate-900 text-base">
             What is the typical rental period for a dumpster in {cityName}?
           </h4>
-          <p class="text-xs text-gray-400 leading-relaxed">
+          <p class="text-xs text-slate-600 leading-relaxed">
             Our standard local flat-rate packages include a **10-day rental period**. If you finish early, simply call local dispatch at {loc.phone} and we will schedule an immediate pickup. Extended rentals can be arranged for a nominal daily fee.
           </p>
         </div>
 
         <!-- Q2 -->
         <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h4 class="font-display font-bold text-white text-base">
+          <h4 class="font-display font-bold text-slate-900 text-base">
             What materials are restricted from entering the dumpster?
           </h4>
-          <p class="text-xs text-gray-400 leading-relaxed">
+          <p class="text-xs text-slate-600 leading-relaxed">
             By local environmental code, you cannot place hazardous waste, toxic chemicals, wet paint, batteries, flammable materials, raw medical waste, or propane tanks into the dumpster. Tires and refrigerators require special processing and must be cleared with dispatch beforehand.
           </p>
         </div>
 
         <!-- Q3 -->
         <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h4 class="font-display font-bold text-white text-base">
+          <h4 class="font-display font-bold text-slate-900 text-base">
             How do I avoid overage fees?
           </h4>
-          <p class="text-xs text-gray-400 leading-relaxed">
+          <p class="text-xs text-slate-600 leading-relaxed">
             Overage fees are assessed only if the weight of your debris exceeds the included tonnage allowance (e.g. 3 tons for a 20-Yard dumpster). To avoid fees, keep the dumpster covered during heavy rainstorms to prevent water weight, and make sure not to fill the container past the "Maximum Load" indicator line.
           </p>
         </div>
