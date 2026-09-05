@@ -9,7 +9,7 @@ export function getStaticPaths() {
   const db = new DatabaseSync(dbPath);
   const stmt = db.prepare('SELECT DISTINCT state, state_full FROM locations');
   const states = stmt.all() as Array<{ state: string; state_full: string }>;
-  
+
   return states.map(s => ({
     params: { state: s.state.toLowerCase() },
     props: { stateCode: s.state, stateFull: s.state_full }
@@ -18,22 +18,41 @@ export function getStaticPaths() {
 
 const { stateCode, stateFull } = Astro.props;
 
-// Fetch all cities belonging to this state
+// Fetch all cities belonging to this state, split by data_quality. Verified
+// cities (real landfill name on file) are the ones in the sitemap and get a
+// prominent, distinct treatment; estimated cities are noindex,follow (see
+// [slug].astro) and stay linked here — that keeps them 2 clicks from home
+// and still passes crawl equity — but are visually secondary so they don't
+// dominate the page.
 const dbPath = join(process.cwd(), 'dumpsters.db');
 const db = new DatabaseSync(dbPath);
-const stmt = db.prepare('SELECT city, population, slug FROM locations WHERE state = ? ORDER BY city ASC');
-const cities = stmt.all(stateCode) as Array<{ city: string; population: number; slug: string }>;
+const stmt = db.prepare(`
+  SELECT city, population, slug, data_quality, landfill_name
+  FROM locations
+  WHERE state = ?
+  ORDER BY city ASC
+`);
+const cities = stmt.all(stateCode) as Array<{
+  city: string;
+  population: number;
+  slug: string;
+  data_quality: 'verified' | 'estimated';
+  landfill_name: string | null;
+}>;
+
+const verifiedCities = cities.filter(c => c.data_quality === 'verified');
+const estimatedCities = cities.filter(c => c.data_quality === 'estimated');
 ---
 
-<Layout 
-  title={`Roll-Off Dumpster Rentals in ${stateFull} | DumpsterGrid`} 
+<Layout
+  title={`Roll-Off Dumpster Rentals in ${stateFull} | DumpsterGrid`}
   description={`Find cheap roll-off dumpster rentals in ${stateFull}. Compare local dumpster cost plans, sizes, and Right-of-Way permitting rules in your city.`}
 >
   <!-- Header -->
   <section class="relative py-20 px-6 overflow-hidden">
     <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -right-10 animate-pulse-slow"></div>
     <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
-    
+
     <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
       <!-- Breadcrumbs -->
       <nav class="flex items-center justify-center gap-2 text-xs font-semibold text-gray-500 mb-4 uppercase tracking-wider select-none">
@@ -56,29 +75,65 @@ const cities = stmt.all(stateCode) as Array<{ city: string; population: number; 
     </div>
   </section>
 
-  <!-- Cities Grid -->
-  <section class="pb-24 px-6 max-w-5xl mx-auto relative z-10">
-    <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
-      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-        <h2 class="font-display font-extrabold text-xl text-white">
-          Active Service Cities in {stateFull}
-        </h2>
-        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-bg text-gray-500">
-          {cities.length} Cities
-        </span>
-      </div>
+  <!-- Verified Cities Grid -->
+  {verifiedCities.length > 0 && (
+    <section class="pb-12 px-6 max-w-5xl mx-auto relative z-10">
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-4 gap-4">
+          <div>
+            <h2 class="font-display font-extrabold text-xl text-white flex items-center gap-2">
+              <span class="text-brand-500">✓</span> Verified Cities in {stateFull}
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">Confirmed local landfill and permit data on file.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-bg text-gray-500 whitespace-nowrap">
+            {verifiedCities.length} Cities
+          </span>
+        </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {cities.map(city => (
-          <a 
-            href={`/locations/${city.slug}`}
-            class="px-4 py-3.5 rounded-xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center sm:text-left flex items-center justify-between"
-          >
-            <span>{city.city}</span>
-            <span class="text-[10px] text-brand-500 font-display font-bold">→</span>
-          </a>
-        ))}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {verifiedCities.map(city => (
+            <a
+              href={`/locations/${city.slug}`}
+              class="px-4 py-3.5 rounded-xl bg-dark-bg/60 border border-brand-500/20 hover:border-brand-500/40 hover:bg-dark-surface text-xs font-semibold text-gray-300 hover:text-white transition-all text-center sm:text-left flex items-center justify-between"
+            >
+              <span class="flex items-center gap-1.5 min-w-0">
+                <span class="text-brand-500 shrink-0">✓</span>
+                <span class="truncate">{city.city}</span>
+              </span>
+              <span class="text-[10px] text-brand-500 font-display font-bold shrink-0">→</span>
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
+
+  <!-- Estimated Cities Grid (secondary, noindex,follow — see [slug].astro) -->
+  {estimatedCities.length > 0 && (
+    <section class="pb-24 px-6 max-w-5xl mx-auto relative z-10">
+      <div class="rounded-2xl p-5 sm:p-6 space-y-4 bg-dark-bg/30 border border-dark-border">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="font-display font-semibold text-sm text-gray-400">
+            More {stateFull} Cities (Estimated Pricing)
+          </h3>
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-dark-bg text-gray-600 whitespace-nowrap">
+            {estimatedCities.length}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+          {estimatedCities.map(city => (
+            <a
+              href={`/locations/${city.slug}`}
+              class="px-2.5 py-2 rounded-lg text-[11px] font-medium text-gray-500 hover:text-gray-300 hover:bg-dark-surface transition-all text-center truncate"
+              title={city.city}
+            >
+              {city.city}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>

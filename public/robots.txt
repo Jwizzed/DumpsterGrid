@@ -1,5 +1,13 @@
 User-agent: *
 Allow: /
 
+# Do NOT Disallow the "estimated" city pages here. Those pages carry
+# <meta name="robots" content="noindex, follow"> instead (see [slug].astro,
+# INDEX_ESTIMATED_PAGES). A robots.txt Disallow stops crawlers from fetching
+# the page at all, which means Googlebot never reads the noindex tag and the
+# URL can still surface in results as an uncrawled listing. Allow + noindex
+# is the correct combination: Google fetches the page, honors noindex, and
+# the internal links on it still pass crawl equity to the verified pages.
+
 # Sitemap Index Declaration
 Sitemap: https://dumpstergrid.com/sitemap-index.xml

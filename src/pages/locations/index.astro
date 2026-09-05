@@ -8,23 +8,35 @@ const dbPath = join(process.cwd(), 'dumpsters.db');
 const db = new DatabaseSync(dbPath);
 
 const statesStmt = db.prepare(`
-  SELECT state, state_full, COUNT(*) AS city_count 
-  FROM locations 
-  GROUP BY state, state_full 
+  SELECT state, state_full, COUNT(*) AS city_count
+  FROM locations
+  GROUP BY state, state_full
   ORDER BY state_full ASC
 `);
 const states = statesStmt.all() as Array<{ state: string; state_full: string; city_count: number }>;
+
+// The 166 "verified" cities carry a real landfill name and are the only
+// per-city pages in the sitemap (astro.config.mjs). They must be reachable
+// in 2 clicks from the homepage, so they are linked directly from this hub
+// (home -> /locations/ -> city), not only via the state hub 3 clicks deep.
+const verifiedStmt = db.prepare(`
+  SELECT city, state, slug, landfill_name
+  FROM locations
+  WHERE data_quality = 'verified'
+  ORDER BY city ASC
+`);
+const verifiedCities = verifiedStmt.all() as Array<{ city: string; state: string; slug: string; landfill_name: string }>;
 ---
 
-<Layout 
-  title="Local Roll-Off Dumpster Service Directory | DumpsterGrid" 
+<Layout
+  title="Local Roll-Off Dumpster Service Directory | DumpsterGrid"
   description="Explore our complete state-by-state directory of locations for roll-off dumpster rentals. Find localized dumpster cost plans, sizes, and permits."
 >
   <!-- Directory Header -->
   <section class="relative py-20 px-6 overflow-hidden">
     <div class="ambient-glow-amber w-[400px] h-[400px] -top-10 -right-10 animate-pulse-slow"></div>
     <div class="ambient-glow-blue w-[400px] h-[400px] bottom-10 left-10 animate-pulse-slow"></div>
-    
+
     <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
       <div class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/25 text-brand-500 font-display font-bold text-xs uppercase tracking-wider">
         🌍 National Directory
@@ -35,6 +47,39 @@ const states = statesStmt.all() as Array<{ state: string; state_full: string; ci
       <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
         Select your state below to find affordable local roll-off bin haulers, permit requirements, and pricing schedules in your city.
       </p>
+    </div>
+  </section>
+
+  <!-- Verified Cities Grid -->
+  <section class="pb-12 px-6 max-w-5xl mx-auto relative z-10">
+    <div class="glass-card rounded-3xl p-8 space-y-8">
+      <div class="border-b border-gray-800 pb-4 flex items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white flex items-center gap-3">
+            <span class="text-brand-500 font-normal select-none">✓</span>
+            Verified City Pages
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">Confirmed landfill and permit data on file for these cities.</p>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-dark-bg border border-dark-border text-gray-400 whitespace-nowrap">
+          {verifiedCities.length} Verified
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {verifiedCities.map(city => (
+          <a
+            href={`/locations/${city.slug}`}
+            class="px-5 py-4 rounded-2xl bg-dark-bg/60 border border-brand-500/20 hover:border-brand-500/40 hover:bg-dark-surface text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center justify-between group"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="text-xs font-bold text-brand-500 select-none shrink-0">✓</span>
+              <span class="truncate">{city.city}, {city.state}</span>
+            </div>
+            <span class="text-brand-500 font-bold opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0">→</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -53,7 +98,7 @@ const states = statesStmt.all() as Array<{ state: string; state_full: string; ci
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {states.map(state => (
-          <a 
+          <a
             href={`/locations/${state.state.toLowerCase()}`}
             class="px-5 py-4 rounded-2xl bg-dark-bg/60 border border-dark-border hover:border-brand-500/30 hover:bg-dark-surface text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center justify-between group"
           >
