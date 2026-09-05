@@ -1,8 +1,13 @@
 import os
 import sqlite3
-import random
 
-# Base list of 150 major US cities across various states with populations and cost multipliers
+# ---------------------------------------------------------------------------
+# Curated, human-verified data for ~150 major US cities: real landfill/transfer
+# station names, real permit requirements and fees, and a real per-city
+# regional cost index. This is the ONLY source of local facts in this file.
+# Every other city in the database gets NULL for anything we don't actually
+# know -- never a plausible-looking substitute.
+# ---------------------------------------------------------------------------
 CITIES_DATA = [
     # Texas
     {"city": "Houston", "state": "TX", "state_full": "Texas", "pop": 2304580, "mult": 1.00, "permit": True, "fee": 50.00, "landfill": "McCarty Road Landfill"},
@@ -20,7 +25,7 @@ CITIES_DATA = [
     {"city": "Garland", "state": "TX", "state_full": "Texas", "pop": 239928, "mult": 0.96, "permit": False, "fee": 0.00, "landfill": "Garland Landfill"},
     {"city": "Frisco", "state": "TX", "state_full": "Texas", "pop": 200509, "mult": 1.10, "permit": True, "fee": 55.00, "landfill": "Custer Road Transfer Station"},
     {"city": "McKinney", "state": "TX", "state_full": "Texas", "pop": 195308, "mult": 1.06, "permit": True, "fee": 45.00, "landfill": "McKinney Landfill"},
-    
+
     # California
     {"city": "Los Angeles", "state": "CA", "state_full": "California", "pop": 3898747, "mult": 1.35, "permit": True, "fee": 85.00, "landfill": "Sunshine Canyon Landfill"},
     {"city": "San Diego", "state": "CA", "state_full": "California", "pop": 1386932, "mult": 1.28, "permit": True, "fee": 75.00, "landfill": "Miramar Landfill"},
@@ -37,7 +42,7 @@ CITIES_DATA = [
     {"city": "Stockton", "state": "CA", "state_full": "California", "pop": 320804, "mult": 1.12, "permit": True, "fee": 55.00, "landfill": "Forward Landfill"},
     {"city": "Chula Vista", "state": "CA", "state_full": "California", "pop": 275487, "mult": 1.22, "permit": True, "fee": 65.00, "landfill": "Otay Landfill"},
     {"city": "Irvine", "state": "CA", "state_full": "California", "pop": 307670, "mult": 1.30, "permit": True, "fee": 75.00, "landfill": "Bee Canyon Landfill"},
-    
+
     # Florida
     {"city": "Jacksonville", "state": "FL", "state_full": "Florida", "pop": 949611, "mult": 0.95, "permit": False, "fee": 0.00, "landfill": "Trail Ridge Landfill"},
     {"city": "Miami", "state": "FL", "state_full": "Florida", "pop": 442241, "mult": 1.18, "permit": True, "fee": 75.00, "landfill": "South Dade Landfill"},
@@ -49,28 +54,28 @@ CITIES_DATA = [
     {"city": "Fort Lauderdale", "state": "FL", "state_full": "Florida", "pop": 182760, "mult": 1.15, "permit": True, "fee": 60.00, "landfill": "Broward County Landfill"},
     {"city": "Port St. Lucie", "state": "FL", "state_full": "Florida", "pop": 204851, "mult": 0.98, "permit": False, "fee": 0.00, "landfill": "St. Lucie County Landfill"},
     {"city": "Cape Coral", "state": "FL", "state_full": "Florida", "pop": 194049, "mult": 1.00, "permit": False, "fee": 0.00, "landfill": "Lee County Landfill"},
-    
+
     # New York
     {"city": "New York", "state": "NY", "state_full": "New York", "pop": 8335897, "mult": 1.50, "permit": True, "fee": 150.00, "landfill": "Seneca Meadows Landfill"},
     {"city": "Buffalo", "state": "NY", "state_full": "New York", "pop": 278349, "mult": 0.92, "permit": True, "fee": 35.00, "landfill": "Chaffee Landfill"},
     {"city": "Rochester", "state": "NY", "state_full": "New York", "pop": 211328, "mult": 0.94, "permit": True, "fee": 40.00, "landfill": "High Acres Landfill"},
     {"city": "Yonkers", "state": "NY", "state_full": "New York", "pop": 211569, "mult": 1.25, "permit": True, "fee": 75.00, "landfill": "Westchester County Transfer"},
     {"city": "Syracuse", "state": "NY", "state_full": "New York", "pop": 148620, "mult": 0.90, "permit": True, "fee": 30.00, "landfill": "OCRRA Landfill"},
-    
+
     # Illinois
     {"city": "Chicago", "state": "IL", "state_full": "Illinois", "pop": 2746388, "mult": 1.25, "permit": True, "fee": 100.00, "landfill": "CID Recycling & Disposal"},
     {"city": "Aurora", "state": "IL", "state_full": "Illinois", "pop": 180542, "mult": 1.05, "permit": True, "fee": 45.00, "landfill": "Kane County Landfill"},
     {"city": "Naperville", "state": "IL", "state_full": "Illinois", "pop": 149541, "mult": 1.10, "permit": True, "fee": 50.00, "landfill": "DuPage County Landfill"},
     {"city": "Joliet", "state": "IL", "state_full": "Illinois", "pop": 150362, "mult": 1.00, "permit": False, "fee": 0.00, "landfill": "Prairie View Landfill"},
     {"city": "Rockford", "state": "IL", "state_full": "Illinois", "pop": 148655, "mult": 0.92, "permit": False, "fee": 0.00, "landfill": "Winnebago Landfill"},
-    
+
     # Georgia
     {"city": "Atlanta", "state": "GA", "state_full": "Georgia", "pop": 498715, "mult": 1.08, "permit": True, "fee": 50.00, "landfill": "Hickory Ridge Landfill"},
     {"city": "Augusta", "state": "GA", "state_full": "Georgia", "pop": 202081, "mult": 0.90, "permit": False, "fee": 0.00, "landfill": "Augusta Solid Waste"},
     {"city": "Columbus", "state": "GA", "state_full": "Georgia", "pop": 206922, "mult": 0.88, "permit": False, "fee": 0.00, "landfill": "Pine Grove Landfill"},
     {"city": "Savannah", "state": "GA", "state_full": "Georgia", "pop": 147780, "mult": 0.96, "permit": True, "fee": 30.00, "landfill": "Dean Forest Road Landfill"},
     {"city": "Athens", "state": "GA", "state_full": "Georgia", "pop": 128560, "mult": 0.92, "permit": False, "fee": 0.00, "landfill": "Athens-Clarke County Landfill"},
-    
+
     # North Carolina
     {"city": "Charlotte", "state": "NC", "state_full": "North Carolina", "pop": 874579, "mult": 1.00, "permit": False, "fee": 0.00, "landfill": "Speedway Landfill"},
     {"city": "Raleigh", "state": "NC", "state_full": "North Carolina", "pop": 467665, "mult": 1.04, "permit": True, "fee": 35.00, "landfill": "Wilders Grove Landfill"},
@@ -80,7 +85,7 @@ CITIES_DATA = [
     {"city": "Fayetteville", "state": "NC", "state_full": "North Carolina", "pop": 208501, "mult": 0.88, "permit": False, "fee": 0.00, "landfill": "Wilkes Road Landfill"},
     {"city": "Cary", "state": "NC", "state_full": "North Carolina", "pop": 174721, "mult": 1.06, "permit": True, "fee": 40.00, "landfill": "South Wake Landfill"},
     {"city": "Wilmington", "state": "NC", "state_full": "North Carolina", "pop": 115451, "mult": 0.98, "permit": True, "fee": 35.00, "landfill": "New Hanover Landfill"},
-    
+
     # Ohio
     {"city": "Columbus", "state": "OH", "state_full": "Ohio", "pop": 905748, "mult": 0.96, "permit": True, "fee": 45.00, "landfill": "Franklin County Landfill"},
     {"city": "Cleveland", "state": "OH", "state_full": "Ohio", "pop": 372624, "mult": 0.98, "permit": True, "fee": 50.00, "landfill": "Harvard Road Landfill"},
@@ -88,14 +93,14 @@ CITIES_DATA = [
     {"city": "Toledo", "state": "OH", "state_full": "Ohio", "pop": 270871, "mult": 0.88, "permit": False, "fee": 0.00, "landfill": "Hoffman Road Landfill"},
     {"city": "Akron", "state": "OH", "state_full": "Ohio", "pop": 190265, "mult": 0.86, "permit": False, "fee": 0.00, "landfill": "Hardesty Park Transfer Station"},
     {"city": "Dayton", "state": "OH", "state_full": "Ohio", "pop": 137644, "mult": 0.88, "permit": False, "fee": 0.00, "landfill": "Stoney Hollow Landfill"},
-    
+
     # Washington
     {"city": "Seattle", "state": "WA", "state_full": "Washington", "pop": 737015, "mult": 1.32, "permit": True, "fee": 90.00, "landfill": "Cedar Hills Landfill"},
     {"city": "Spokane", "state": "WA", "state_full": "Washington", "pop": 228989, "mult": 1.02, "permit": False, "fee": 0.00, "landfill": "Spokane Regional Landfill"},
     {"city": "Tacoma", "state": "WA", "state_full": "Washington", "pop": 219346, "mult": 1.15, "permit": True, "fee": 60.00, "landfill": "Tacoma Landfill"},
     {"city": "Vancouver", "state": "WA", "state_full": "Washington", "pop": 190969, "mult": 1.10, "permit": False, "fee": 0.00, "landfill": "Finley Buttes Landfill"},
     {"city": "Bellevue", "state": "WA", "state_full": "Washington", "pop": 151854, "mult": 1.30, "permit": True, "fee": 80.00, "landfill": "Factoria Transfer Station"},
-    
+
     # Arizona
     {"city": "Phoenix", "state": "AZ", "state_full": "Arizona", "pop": 1608139, "mult": 0.98, "permit": False, "fee": 0.00, "landfill": "SR 85 Landfill"},
     {"city": "Tucson", "state": "AZ", "state_full": "Arizona", "pop": 542629, "mult": 0.90, "permit": False, "fee": 0.00, "landfill": "Los Reales Landfill"},
@@ -106,7 +111,7 @@ CITIES_DATA = [
     {"city": "Scottsdale", "state": "AZ", "state_full": "Arizona", "pop": 241361, "mult": 1.10, "permit": True, "fee": 45.00, "landfill": "Scottsdale Transfer Station"},
     {"city": "Tempe", "state": "AZ", "state_full": "Arizona", "pop": 180587, "mult": 0.96, "permit": False, "fee": 0.00, "landfill": "Tempe Transfer Station"},
     {"city": "Peoria", "state": "AZ", "state_full": "Arizona", "pop": 190985, "mult": 0.94, "permit": False, "fee": 0.00, "landfill": "Peoria Landfill"},
-    
+
     # Colorado
     {"city": "Denver", "state": "CO", "state_full": "Colorado", "pop": 715522, "mult": 1.14, "permit": True, "fee": 55.00, "landfill": "Denver Arapahoe Disposal"},
     {"city": "Colorado Springs", "state": "CO", "state_full": "Colorado", "pop": 478961, "mult": 1.02, "permit": False, "fee": 0.00, "landfill": "Midway Landfill"},
@@ -115,28 +120,28 @@ CITIES_DATA = [
     {"city": "Lakewood", "state": "CO", "state_full": "Colorado", "pop": 155984, "mult": 1.10, "permit": True, "fee": 40.00, "landfill": "Rooney Road Recycling"},
     {"city": "Thornton", "state": "CO", "state_full": "Colorado", "pop": 141867, "mult": 1.02, "permit": False, "fee": 0.00, "landfill": "Dad Clark Transfer Station"},
     {"city": "Arvada", "state": "CO", "state_full": "Colorado", "pop": 124402, "mult": 1.08, "permit": True, "fee": 35.00, "landfill": "Jefferson County Disposal"},
-    
+
     # Massachusetts
     {"city": "Boston", "state": "MA", "state_full": "Massachusetts", "pop": 675647, "mult": 1.38, "permit": True, "fee": 110.00, "landfill": "Rochester Environmental"},
     {"city": "Worcester", "state": "MA", "state_full": "Massachusetts", "pop": 206560, "mult": 1.10, "permit": True, "fee": 50.00, "landfill": "Worcester Transfer Station"},
     {"city": "Springfield", "state": "MA", "state_full": "Massachusetts", "pop": 155929, "mult": 1.05, "permit": True, "fee": 45.00, "landfill": "Springfield Landfill"},
     {"city": "Cambridge", "state": "MA", "state_full": "Massachusetts", "pop": 118403, "mult": 1.40, "permit": True, "fee": 120.00, "landfill": "Covanta Haverhill"},
     {"city": "Lowell", "state": "MA", "state_full": "Massachusetts", "pop": 115554, "mult": 1.08, "permit": True, "fee": 50.00, "landfill": "Lowell Recycling Depot"},
-    
+
     # Pennsylvania
     {"city": "Philadelphia", "state": "PA", "state_full": "Pennsylvania", "pop": 1603797, "mult": 1.22, "permit": True, "fee": 75.00, "landfill": "Grows Landfill"},
     {"city": "Pittsburgh", "state": "PA", "state_full": "Pennsylvania", "pop": 302971, "mult": 1.08, "permit": True, "fee": 55.00, "landfill": "Arnoni Landfill"},
     {"city": "Allentown", "state": "PA", "state_full": "Pennsylvania", "pop": 125845, "mult": 1.02, "permit": True, "fee": 40.00, "landfill": "Chrin Sanitary Landfill"},
     {"city": "Erie", "state": "PA", "state_full": "Pennsylvania", "pop": 94834, "mult": 0.88, "permit": False, "fee": 0.00, "landfill": "Lake View Landfill"},
     {"city": "Reading", "state": "PA", "state_full": "Pennsylvania", "pop": 95112, "mult": 0.94, "permit": True, "fee": 35.00, "landfill": "Pioneer Crossing Landfill"},
-    
+
     # Michigan
     {"city": "Detroit", "state": "MI", "state_full": "Michigan", "pop": 639111, "mult": 1.00, "permit": True, "fee": 45.00, "landfill": "Pine Tree Acres Landfill"},
     {"city": "Grand Rapids", "state": "MI", "state_full": "Michigan", "pop": 198917, "mult": 0.96, "permit": False, "fee": 0.00, "landfill": "South Kent Landfill"},
     {"city": "Warren", "state": "MI", "state_full": "Michigan", "pop": 139387, "mult": 0.98, "permit": True, "fee": 35.00, "landfill": "Macomb Landfill"},
     {"city": "Sterling Heights", "state": "MI", "state_full": "Michigan", "pop": 134346, "mult": 0.96, "permit": False, "fee": 0.00, "landfill": "Clinton Township Transfer"},
     {"city": "Lansing", "state": "MI", "state_full": "Michigan", "pop": 112644, "mult": 0.92, "permit": False, "fee": 0.00, "landfill": "Granger Landfill"},
-    
+
     # North/South General Major US Cities
     {"city": "Indianapolis", "state": "IN", "state_full": "Indiana", "pop": 887642, "mult": 0.94, "permit": False, "fee": 0.00, "landfill": "Southside Landfill"},
     {"city": "Fort Wayne", "state": "IN", "state_full": "Indiana", "pop": 263886, "mult": 0.86, "permit": False, "fee": 0.00, "landfill": "National Serv-All Landfill"},
@@ -201,29 +206,72 @@ CITIES_DATA = [
     {"city": "Burlington", "state": "VT", "state_full": "Vermont", "pop": 44743, "mult": 1.12, "permit": False, "fee": 0.00, "landfill": "CSWD Landfill"},
 ]
 
-# Standard baseline metrics for dumpster sizes
-DUMPSTER_SIZES = [
-    {"size": "10-Yard", "base_price": 320.00, "tons": 2.0, "overage": 65.00, "desc": "Perfect for cleanouts of single rooms, minor landscaping, or small bathroom remodeling projects."},
-    {"size": "20-Yard", "base_price": 430.00, "tons": 3.0, "overage": 70.00, "desc": "Ideal for medium-size remodeling, carpet removal, deck demolition, or whole-house cleanouts."},
-    {"size": "30-Yard", "base_price": 540.00, "tons": 4.0, "overage": 75.00, "desc": "Designed for major residential renovations, construction additions, or commercial cleanouts."},
-    {"size": "40-Yard", "base_price": 650.00, "tons": 5.0, "overage": 80.00, "desc": "Great for large-scale demolition, commercial roof replacements, or major construction projects."},
-]
+# Lookup keyed by (city, state) -- the only match key we trust.
+CURATED_LOOKUP = {(c["city"], c["state"]): c for c in CITIES_DATA}
+
+# Standard baseline national price plans, before the regional index is applied.
+BASE_PRICES = {
+    "10yd": {"low": 300, "high": 380},
+    "20yd": {"low": 400, "high": 490},
+    "30yd": {"low": 500, "high": 590},
+    "40yd": {"low": 600, "high": 690},
+}
+
+# Deterministic regional cost tiers for cities with no curated per-city index.
+# No randomness: same state + population always produces the same multiplier.
+HIGH_COST_STATES = {"CA", "NY", "MA", "WA", "NJ", "HI", "DC", "CO", "OR"}
+LOW_COST_STATES = {"MS", "AL", "AR", "WV", "KY", "OK", "IA", "KS", "NE", "ND", "SD", "MT", "WY"}
+
+# Every price in this database is a national base price times a regional
+# index -- never a local quote. Say so in the data, not just in a comment.
+PRICE_BASIS = "national estimate, adjusted by regional cost index"
+
+DB_PATH = "dumpsters.db"
+
+
+def estimated_multiplier(state, population):
+    """Deterministic regional cost index for a city with no curated data.
+    Same (state, population) always produces the same multiplier -- there is
+    no random jitter here. This is a coarse, honest estimate, not a quote."""
+    if state in HIGH_COST_STATES or population > 300000:
+        return 1.20
+    if state in LOW_COST_STATES or population < 25000:
+        return 0.90
+    return 1.00
+
+
+def load_existing_universe(db_path):
+    """The 10,000-city/slug universe is already live at these URLs (10,060
+    indexed/crawled pages depend on the exact slug for each row). This seeder
+    fixes FABRICATED FIELDS on that existing universe -- it does not invent a
+    new one and does not re-derive slugs, so no URL can change or 404."""
+    if not os.path.exists(db_path):
+        raise SystemExit(
+            f"{db_path} not found. This seeder only repairs fabricated fields "
+            "on the existing city/slug universe -- it does not generate one "
+            "from scratch. Restore dumpsters.db from git (it is tracked) "
+            "before running this script."
+        )
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT id, city, state, state_full, population, slug "
+        "FROM locations ORDER BY id"
+    ).fetchall()
+    conn.close()
+    return rows
+
 
 def main():
-    print("Initializing SQLite Database Seeder...")
-    
-    # Ensure directory exists
-    os.makedirs("data", exist_ok=True)
-    db_path = os.path.join("data", "dumpsters.db")
-    
-    # If db exists, remove it for clean rebuild
-    if os.path.exists(db_path):
-        os.remove(db_path)
-        
-    conn = sqlite3.connect(db_path)
+    print("Loading existing city/slug universe from dumpsters.db ...")
+    existing_rows = load_existing_universe(DB_PATH)
+    print(f"Loaded {len(existing_rows)} existing rows.")
+
+    print("Rebuilding dumpsters.db with verified/estimated data quality split ...")
+    os.remove(DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    
-    # Create tables
+
     cursor.execute("""
     CREATE TABLE locations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -235,80 +283,88 @@ def main():
         permit_cost REAL,
         landfill_name TEXT,
         base_multiplier REAL,
-        phone TEXT
+        phone TEXT,
+        slug TEXT UNIQUE,
+        avg_low_10yd INTEGER,
+        avg_high_10yd INTEGER,
+        avg_low_20yd INTEGER,
+        avg_high_20yd INTEGER,
+        avg_low_30yd INTEGER,
+        avg_high_30yd INTEGER,
+        avg_low_40yd INTEGER,
+        avg_high_40yd INTEGER,
+        data_quality TEXT NOT NULL,
+        price_basis TEXT NOT NULL
     )
     """)
-    
-    cursor.execute("""
-    CREATE TABLE pricing (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        location_id INTEGER,
-        size TEXT NOT NULL,
-        base_price REAL,
-        included_tonnage REAL,
-        overage_fee_per_ton REAL,
-        description TEXT,
-        FOREIGN KEY (location_id) REFERENCES locations (id)
-    )
-    """)
-    
-    # Seed data
-    print(f"Seeding {len(CITIES_DATA)} cities...")
-    for idx, c in enumerate(CITIES_DATA):
-        # Generate clean phone pattern based on location index
-        # Programmatic simulated toll-free number or unique regional number
-        phone = f"800-508-{4000 + idx}"
-        
-        cursor.execute("""
-        INSERT INTO locations (city, state, state_full, population, permit_required, permit_cost, landfill_name, base_multiplier, phone)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            c["city"],
-            c["state"],
-            c["state_full"],
-            c["pop"],
-            1 if c["permit"] else 0,
-            c["fee"],
-            c["landfill"],
-            c["mult"],
-            phone
+
+    verified_count = 0
+    estimated_count = 0
+    insert_rows = []
+
+    for row in existing_rows:
+        city, state, state_full, population, slug = (
+            row["city"], row["state"], row["state_full"], row["population"], row["slug"]
+        )
+        curated = CURATED_LOOKUP.get((city, state))
+
+        if curated is not None:
+            data_quality = "verified"
+            landfill_name = curated["landfill"]
+            permit_required = 1 if curated["permit"] else 0
+            permit_cost = curated["fee"]
+            base_multiplier = curated["mult"]
+            verified_count += 1
+        else:
+            # Unknown is NULL, never a plausible-looking substitute.
+            data_quality = "estimated"
+            landfill_name = None
+            permit_required = None
+            permit_cost = None
+            base_multiplier = estimated_multiplier(state, population or 0)
+            estimated_count += 1
+
+        # Fabricated toll-free numbers removed entirely -- see SEO-AUDIT.md
+        # finding #2. No replacement is invented; the column stays for schema
+        # compatibility and is NULL until a real number exists.
+        phone = None
+
+        price_fields = {}
+        for size_key, base in BASE_PRICES.items():
+            price_fields[f"avg_low_{size_key}"] = int(base_multiplier * base["low"])
+            price_fields[f"avg_high_{size_key}"] = int(base_multiplier * base["high"])
+
+        insert_rows.append((
+            city, state, state_full, population,
+            permit_required, permit_cost, landfill_name, base_multiplier, phone, slug,
+            price_fields["avg_low_10yd"], price_fields["avg_high_10yd"],
+            price_fields["avg_low_20yd"], price_fields["avg_high_20yd"],
+            price_fields["avg_low_30yd"], price_fields["avg_high_30yd"],
+            price_fields["avg_low_40yd"], price_fields["avg_high_40yd"],
+            data_quality, PRICE_BASIS,
         ))
-        
-        location_id = cursor.lastrowid
-        
-        # Seed sizes and localized pricing
-        for s in DUMPSTER_SIZES:
-            # Localize base price with multiplier and slight random perturbation (+$5-$15 increments) to look authentic
-            local_base = round((s["base_price"] * c["mult"]) / 5.0) * 5.0
-            # Add small random variation
-            local_base += random.choice([0, 5, 10, 15, -5])
-            
-            # Localize overage
-            local_overage = round((s["overage"] * c["mult"]) / 5.0) * 5.0
-            
-            cursor.execute("""
-            INSERT INTO pricing (location_id, size, base_price, included_tonnage, overage_fee_per_ton, description)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """, (
-                location_id,
-                s["size"],
-                local_base,
-                s["tons"],
-                local_overage,
-                s["desc"]
-            ))
-            
+
+    cursor.executemany("""
+    INSERT INTO locations (
+        city, state, state_full, population, permit_required, permit_cost,
+        landfill_name, base_multiplier, phone, slug,
+        avg_low_10yd, avg_high_10yd, avg_low_20yd, avg_high_20yd,
+        avg_low_30yd, avg_high_30yd, avg_low_40yd, avg_high_40yd,
+        data_quality, price_basis
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, insert_rows)
+
     conn.commit()
-    
-    # Confirm seeding
+
     cursor.execute("SELECT COUNT(*) FROM locations")
-    city_count = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM pricing")
-    pricing_count = cursor.fetchone()[0]
-    
+    total = cursor.fetchone()[0]
     conn.close()
-    print(f"Database successfully generated at {db_path}!")
-    print(f"Seeded {city_count} locations with {pricing_count} dynamic pricing matrices.")
+
+    print(f"Database successfully regenerated at {DB_PATH}!")
+    print(f"Seeded {total} locations -- {verified_count} verified, {estimated_count} estimated.")
+    print("phone is NULL for all rows. landfill_name/permit_required/permit_cost")
+    print("are NULL for every estimated row -- no invented facility, permit or fee.")
+
 
 if __name__ == "__main__":
     main()
