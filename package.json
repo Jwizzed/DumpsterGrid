@@ -1,5 +1,5 @@
 {
-  "name": "lunar-luminosity",
+  "name": "dumpstergrid",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node --max-old-space-size=4096 node_modules/astro/dist/cli/index.js build",
+    "build": "NODE_OPTIONS=--max-old-space-size=4096 astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
